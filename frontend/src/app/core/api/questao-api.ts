@@ -42,7 +42,10 @@ export class QuestaoApi {
   despublicar(id: string): Observable<QuestaoDetalhe> {
     return this.http.post<QuestaoDetalhe>(`${this.base}/${id}/despublicar`, null);
   }
-  contarDisponiveis(disciplinaId: string, dificuldade: string | null): Observable<{ disponiveis: number }> {
+  contarDisponiveis(
+    disciplinaId: string,
+    dificuldade: string | null,
+  ): Observable<{ disponiveis: number }> {
     let params = new HttpParams().set('disciplinaId', disciplinaId);
     if (dificuldade) params = params.set('dificuldade', dificuldade);
     return this.http.get<{ disponiveis: number }>(`${this.base}/contagem`, { params });

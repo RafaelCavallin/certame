@@ -45,7 +45,9 @@ describe('sairSessaoGuard', () => {
     expect(isObservable(resultado$)).toBe(true);
 
     const promessa = firstValueFrom(resultado$ as never);
-    (fixture.nativeElement as HTMLElement).querySelector<HTMLButtonElement>('.btn-primary')!.click();
+    (fixture.nativeElement as HTMLElement)
+      .querySelector<HTMLButtonElement>('.btn-primary')!
+      .click();
     const resultado = await promessa;
 
     expect(resultado).toBe(true);
@@ -65,7 +67,9 @@ describe('sairSessaoGuard', () => {
     fixture.detectChanges();
 
     const promessa = firstValueFrom(resultado$ as never);
-    (fixture.nativeElement as HTMLElement).querySelector<HTMLButtonElement>('.btn-secondary')!.click();
+    (fixture.nativeElement as HTMLElement)
+      .querySelector<HTMLButtonElement>('.btn-secondary')!
+      .click();
     const resultado = await promessa;
 
     expect(resultado).toBe(false);

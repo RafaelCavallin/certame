@@ -1,5 +1,10 @@
 <div class="dialog-backdrop" (click)="fechado.emit()">
-  <section class="dialog adicionar" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+  <section
+    class="dialog adicionar"
+    role="dialog"
+    aria-modal="true"
+    (click)="$event.stopPropagation()"
+  >
     <header>
       <h2 class="dialog-title"><i class="ph ph-notebook"></i> Adicionar ao caderno</h2>
       <button

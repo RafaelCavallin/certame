@@ -1,10 +1,5 @@
 <div class="barra">
-  <button
-    class="btn btn-secondary"
-    type="button"
-    [disabled]="primeiro()"
-    (click)="anterior.emit()"
-  >
+  <button class="btn btn-secondary" type="button" [disabled]="primeiro()" (click)="anterior.emit()">
     Anterior
   </button>
   @if (prova()) {

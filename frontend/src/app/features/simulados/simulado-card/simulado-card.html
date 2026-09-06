@@ -30,7 +30,11 @@
         <button class="btn btn-secondary" type="button" (click)="revisar.emit()">Revisar</button>
       </div>
     } @else {
-      <span class="tag" [class.tag-accent]="resumo().estado === 'DISPONIVEL'" [class.tag-neutral]="resumo().estado !== 'DISPONIVEL'">
+      <span
+        class="tag"
+        [class.tag-accent]="resumo().estado === 'DISPONIVEL'"
+        [class.tag-neutral]="resumo().estado !== 'DISPONIVEL'"
+      >
         {{ resumo().estado === 'DISPONIVEL' ? 'Disponível' : 'Agendado' }}
       </span>
       @if (resumo().estado === 'DISPONIVEL') {
