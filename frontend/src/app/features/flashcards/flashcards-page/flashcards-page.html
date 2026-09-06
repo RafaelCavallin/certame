@@ -1,0 +1,300 @@
+<div class="flashcards-page">
+  <div class="cabecalho">
+    <div>
+      <div class="titulo">Meus flashcards</div>
+      <div class="subtitulo">
+        {{ store.indicadores().total }} cards · {{ store.indicadores().vencendoHoje }} vencendo hoje
+        · agendamento por FSRS
+      </div>
+    </div>
+    <div class="acoes">
+      <a routerLink="/flashcards/decks" class="btn btn-ghost">
+        <i class="ph ph-folder"></i> Decks
+      </a>
+      <button
+        class="btn btn-secondary"
+        type="button"
+        (click)="abrirNovo()"
+        style="border-color: var(--color-divider)"
+      >
+        <i class="ph ph-plus"></i> Novo flashcard
+      </button>
+      <a routerLink="/flashcards/estudar" class="btn btn-primary">
+        <i class="ph ph-lightning"></i> Estudar agora
+        @if (store.indicadores().vencendoHoje) {
+          <span class="contador-vencendo">{{ store.indicadores().vencendoHoje }}</span>
+        }
+      </a>
+    </div>
+  </div>
+
+  <div class="indicadores">
+    @for (cartao of indicadores.cartoes(); track cartao.label) {
+      <div class="card elev-sm" style="gap: 6px">
+        <span class="card-kicker">{{ cartao.label }}</span>
+        <div style="display: flex; align-items: baseline; gap: 8px">
+          <div style="font-family: var(--font-heading); font-size: 26px" [style.color]="cartao.cor">
+            {{ cartao.valor }}
+          </div>
+          <div style="font-size: 11.5px; color: var(--color-neutral-500)">{{ cartao.nota }}</div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="filtros">
+    <div class="busca">
+      <i class="ph ph-magnifying-glass" aria-hidden="true"></i>
+      <input
+        class="input"
+        placeholder="Buscar na frente ou no verso do card…"
+        [value]="store.filtro().q ?? ''"
+        (input)="filtros.buscar(campoBusca.value)"
+        #campoBusca
+      />
+    </div>
+    <select
+      class="input"
+      aria-label="Deck"
+      [value]="store.filtro().deck ?? ''"
+      (change)="filtros.filtrarDeck(selDeck.value)"
+      #selDeck
+    >
+      <option value="">Todos os decks</option>
+      <option value="sem-deck">Sem deck</option>
+      @for (deck of decksFiltro(); track deck.id) {
+        <option [value]="deck.id">{{ deck.nome }}</option>
+      }
+    </select>
+    <select
+      class="input"
+      aria-label="Disciplina"
+      [value]="store.filtro().disciplina ?? ''"
+      (change)="filtros.filtrarDisciplina(selDisciplina.value)"
+      #selDisciplina
+    >
+      <option value="">Todas as disciplinas</option>
+      @for (disciplina of disciplinas(); track disciplina.id) {
+        <option [value]="disciplina.id">{{ disciplina.nome }}</option>
+      }
+    </select>
+    <select
+      class="input"
+      aria-label="Estado"
+      [value]="store.filtro().estado ?? ''"
+      (change)="filtros.filtrarEstado(selEstado.value)"
+      #selEstado
+    >
+      <option value="">Todos os estados</option>
+      <option value="NOVO">Novo</option>
+      <option value="APRENDENDO">Aprendendo</option>
+      <option value="REAPRENDENDO">Reaprendendo</option>
+      <option value="REVISAO">Em revisão</option>
+    </select>
+    <select
+      class="input"
+      aria-label="Ordenar"
+      [value]="store.filtro().sort ?? 'criadoEm,desc'"
+      (change)="filtros.ordenar(selOrdenar.value)"
+      #selOrdenar
+    >
+      <option value="criadoEm,desc">Mais recentes primeiro</option>
+      <option value="criadoEm,asc">Mais antigos primeiro</option>
+      <option value="proximaRevisao,asc">Próxima revisão: mais perto</option>
+      <option value="proximaRevisao,desc">Próxima revisão: mais longe</option>
+    </select>
+    <div class="alternador-arquivamento" role="group" aria-label="Ativos ou arquivados">
+      <button
+        type="button"
+        class="btn"
+        [class.btn-primary]="!store.filtro().arquivados"
+        [class.btn-secondary]="store.filtro().arquivados"
+        (click)="filtros.alternarArquivados(false)"
+      >
+        Ativos
+      </button>
+      <button
+        type="button"
+        class="btn"
+        [class.btn-primary]="store.filtro().arquivados"
+        [class.btn-secondary]="!store.filtro().arquivados"
+        (click)="filtros.alternarArquivados(true)"
+      >
+        Arquivados
+      </button>
+    </div>
+  </div>
+
+  @if (store.selecionados().length > 0) {
+    <div class="barra-selecao">
+      <span>{{ store.selecionados().length }} selecionado(s)</span>
+      <select
+        class="input"
+        aria-label="Mover para deck"
+        [value]="moverParaDeck.destino() ?? ''"
+        (change)="moverParaDeck.destino.set(selMover.value || null)"
+        #selMover
+      >
+        <option value="">Mover para deck…</option>
+        @for (deck of moverParaDeck.decks(); track deck.id) {
+          <option [value]="deck.id">{{ deck.nome }}</option>
+        }
+      </select>
+      <button
+        class="btn btn-primary"
+        type="button"
+        [disabled]="moverParaDeck.desabilitado()"
+        (click)="moverParaDeck.mover()"
+      >
+        <i class="ph ph-folder-simple"></i> Mover para deck
+      </button>
+      <button
+        class="btn btn-ghost"
+        type="button"
+        style="margin-left: auto"
+        (click)="store.selecionados.set([])"
+      >
+        Cancelar seleção
+      </button>
+    </div>
+  }
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th style="width: 34px">
+          <input
+            type="checkbox"
+            [checked]="
+              store.pagina().content.length > 0 &&
+              store.selecionados().length === store.pagina().content.length
+            "
+            (change)="store.alternarTodos()"
+            aria-label="Selecionar todos"
+          />
+        </th>
+        <th>Frente</th>
+        <th>Deck</th>
+        <th>Disciplina · assunto</th>
+        <th>Estado</th>
+        <th>Próxima revisão</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (card of store.pagina().content; track card.id) {
+        <tr>
+          <td>
+            <input
+              type="checkbox"
+              [checked]="store.selecionados().includes(card.id)"
+              (change)="store.alternarSelecao(card.id)"
+              [attr.aria-label]="'Selecionar ' + card.frente"
+            />
+          </td>
+          <td>
+            <div style="font-size: 13.5px; color: var(--color-text)">{{ card.frente }}</div>
+            <div style="font-size: 11.5px; color: var(--color-neutral-500); margin-top: 3px">
+              {{ versoResumido(card.verso) }}
+            </div>
+            @if (card.origem; as origem) {
+              <button
+                type="button"
+                class="link-origem"
+                disabled
+                title="A tela de estudo ainda não abre uma questão específica."
+              >
+                <i class="ph ph-link-simple"></i>Criado na questão {{ origem.codigo }}
+              </button>
+            }
+          </td>
+          <td style="font-size: 13px; color: var(--color-neutral-300)">
+            {{ card.deck?.nome ?? 'Sem deck' }}
+          </td>
+          <td style="font-size: 12.5px; color: var(--color-neutral-400)">
+            {{ card.disciplina?.nome ?? '—' }}
+            <div style="color: var(--color-neutral-500); font-size: 11.5px">
+              {{ card.assunto?.nome ?? '' }}
+            </div>
+          </td>
+          <td>
+            <span [class]="tagEstado(card.estado)">{{ rotuloEstado(card.estado) }}</span>
+          </td>
+          <td style="font-size: 12.5px; font-variant-numeric: tabular-nums">
+            {{ card.proximaRevisao | date: 'dd/MM/yyyy' }}
+          </td>
+          <td>
+            <div style="display: flex; gap: 4px; justify-content: flex-end">
+              <button
+                class="btn btn-icon btn-secondary"
+                title="Editar"
+                (click)="editar(card)"
+                style="border-color: transparent; width: 30px; height: 30px"
+              >
+                <i class="ph ph-pencil-simple"></i>
+              </button>
+              @if (store.filtro().arquivados) {
+                <button
+                  class="btn btn-icon btn-secondary"
+                  title="Restaurar"
+                  (click)="restaurar(card.id)"
+                  style="border-color: transparent; width: 30px; height: 30px"
+                >
+                  <i class="ph ph-arrow-counter-clockwise"></i>
+                </button>
+              } @else {
+                <button
+                  class="btn btn-icon btn-secondary"
+                  title="Arquivar"
+                  (click)="arquivar(card.id)"
+                  style="border-color: transparent; width: 30px; height: 30px"
+                >
+                  <i class="ph ph-archive"></i>
+                </button>
+              }
+              <button
+                class="btn btn-icon btn-secondary"
+                title="Excluir"
+                (click)="pedirExclusao(card)"
+                style="border-color: transparent; width: 30px; height: 30px; color: #e0787f"
+              >
+                <i class="ph ph-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+  @if (store.acervoVazio()) {
+    <div class="estado-vazio-flashcards">
+      <i class="ph ph-lightning" aria-hidden="true"></i>
+      <div class="titulo">Você ainda não tem flashcards</div>
+      <div class="texto">
+        Crie cards direto na tela da questão, sem sair da sessão de estudo, ou comece um card avulso
+        por aqui.
+      </div>
+      <button class="btn btn-primary" type="button" (click)="abrirNovo()">
+        <i class="ph ph-plus"></i> Novo flashcard
+      </button>
+    </div>
+  }
+  @if (store.vazio()) {
+    <div class="estado-vazio-flashcards">
+      <i class="ph ph-lightning" aria-hidden="true"></i>
+      <div class="titulo">Nenhum flashcard com esses filtros</div>
+      <div class="texto">Crie cards direto na tela da questão, sem sair da sessão de estudo.</div>
+    </div>
+  }
+</div>
+
+@if (excluindo(); as card) {
+  <app-confirmacao-dialog
+    titulo="Excluir flashcard"
+    mensagem="O card será removido da sua lista. As revisões já feitas continuam preservadas no histórico."
+    confirmarLabel="Excluir"
+    (confirmado)="confirmarExclusao()"
+    (cancelado)="excluindo.set(null)"
+  />
+}

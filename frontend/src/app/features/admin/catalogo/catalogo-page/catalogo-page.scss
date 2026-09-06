@@ -1,0 +1,43 @@
+.catalogo {
+  max-width: 980px;
+  padding: var(--space-8);
+}
+.heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-6);
+}
+.tabs {
+  width: 100%;
+  margin-bottom: var(--space-4);
+}
+.tabs .ativo {
+  color: var(--color-accent);
+}
+.table td:last-child,
+.table th:last-child {
+  text-align: right;
+}
+.danger,
+.erro {
+  color: var(--color-danger-300);
+}
+.dialog-backdrop {
+  z-index: 5;
+}
+.dialog .field {
+  display: grid;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+@media (max-width: 650px) {
+  .catalogo {
+    padding: var(--space-4);
+  }
+  .heading {
+    align-items: flex-start;
+    gap: var(--space-3);
+    flex-direction: column;
+  }
+}

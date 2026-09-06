@@ -1,0 +1,15 @@
+.picker {
+  width: min(720px, 94vw);
+}
+.tabela {
+  max-height: 300px;
+  overflow: auto;
+}
+.tabela input {
+  width: auto;
+  height: auto;
+}
+.erro {
+  color: var(--color-danger-300);
+  font-size: 13px;
+}

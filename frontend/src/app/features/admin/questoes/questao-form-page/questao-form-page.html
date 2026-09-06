@@ -1,0 +1,179 @@
+<div class="form-page">
+  <a class="btn btn-ghost" routerLink="/admin/questoes"
+    ><i class="ph ph-arrow-left"></i> Voltar para o banco de questões</a
+  >
+  <form class="card elev-sm" [formGroup]="store.formulario" (ngSubmit)="salvar()">
+    <div class="form-heading">
+      <h1>{{ store.editando() ? 'Editar questão' : 'Nova questão' }}</h1>
+      @if (store.questao(); as q) {
+        <span class="tag tag-neutral">{{ q.codigo }}</span>
+      }
+    </div>
+    <div class="grid">
+      <div class="field">
+        <label for="disciplina">Disciplina</label
+        ><select id="disciplina" class="input" formControlName="disciplinaId">
+          <option [ngValue]="null">Selecione uma disciplina</option>
+          @for (d of store.disciplinas(); track d.id) {
+            <option [value]="d.id">{{ d.nome }}</option>
+          }
+        </select>
+      </div>
+      <div class="field">
+        <label for="assunto">Assunto</label
+        ><select id="assunto" class="input" formControlName="assuntoId">
+          <option [ngValue]="null">Selecione um assunto</option>
+          @for (d of store.disciplinas(); track d.id) {
+            @for (a of d.assuntos; track a.id) {
+              <option [value]="a.id">{{ a.nome }}</option>
+            }
+          }
+        </select>
+      </div>
+      <div class="field">
+        <label for="banca">Banca</label
+        ><select id="banca" class="input" formControlName="bancaId">
+          <option [ngValue]="null">Selecione uma banca</option>
+          @for (b of store.bancas(); track b.id) {
+            <option [value]="b.id">{{ b.nome }}</option>
+          }
+        </select>
+      </div>
+      <div class="field">
+        <label for="ano">Ano</label
+        ><input id="ano" class="input" type="number" formControlName="ano" />
+      </div>
+      <div class="field">
+        <label for="orgao">Órgão</label
+        ><select id="orgao" class="input" formControlName="orgaoId">
+          <option [ngValue]="null">Selecione um órgão</option>
+          @for (o of store.orgaos(); track o.id) {
+            <option [value]="o.id">{{ o.nome }}</option>
+          }
+        </select>
+      </div>
+      <div class="field">
+        <label for="dificuldade">Dificuldade</label
+        ><select id="dificuldade" class="input" formControlName="dificuldade">
+          <option value="FACIL">Fácil</option>
+          <option value="MEDIA">Média</option>
+          <option value="DIFICIL">Difícil</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label>Tipo</label>
+      <div class="seg">
+        <label class="seg-opt"
+          ><input
+            type="radio"
+            value="ME"
+            formControlName="tipo"
+            (click)="onCliqueTipo($event, 'ME')"
+          />
+          Múltipla escolha</label
+        ><label class="seg-opt"
+          ><input
+            type="radio"
+            value="CE"
+            formControlName="tipo"
+            (click)="onCliqueTipo($event, 'CE')"
+          />
+          Certo/Errado</label
+        >
+      </div>
+    </div>
+    <div class="field">
+      <label for="enunciado">Enunciado</label
+      ><textarea id="enunciado" class="input" formControlName="enunciado"></textarea>
+      @if (mensagem(store.formulario.controls.enunciado); as m) {
+        <small class="erro">{{ m }}</small>
+      }
+    </div>
+    @if (store.formulario.controls.tipo.value === 'ME') {
+      <div class="field">
+        <label>Alternativas (marque a correta)</label>
+        <div class="gabaritos">
+          @for (a of store.formulario.controls.alternativas.controls; track $index) {
+            <label class="radio"
+              ><input type="radio" formControlName="gabarito" [value]="'ABCDE'[$index]" /><span
+                class="dot"
+              ></span
+              >{{ 'ABCDE'[$index] }}</label
+            >
+          }
+        </div>
+        <div class="alternativas" formArrayName="alternativas">
+          @for (a of store.formulario.controls.alternativas.controls; track $index) {
+            <div class="alternativa" [formGroupName]="$index">
+              <strong>{{ 'ABCDE'[$index] }}</strong
+              ><input class="input" formControlName="texto" placeholder="Texto da alternativa" />
+            </div>
+          }
+        </div>
+        <button
+          class="btn btn-ghost"
+          type="button"
+          [disabled]="store.formulario.controls.alternativas.length >= 5"
+          (click)="store.adicionarAlternativa()"
+        >
+          <i class="ph ph-plus"></i> Adicionar alternativa
+        </button>
+      </div>
+    } @else {
+      <div class="field">
+        <label>Gabarito</label>
+        <div class="seg">
+          <label class="seg-opt"
+            ><input type="radio" formControlName="gabarito" value="CERTO" /> Certo</label
+          ><label class="seg-opt"
+            ><input type="radio" formControlName="gabarito" value="ERRADO" /> Errado</label
+          >
+        </div>
+      </div>
+    }
+    @if (store.pendenciasPublicacao(); as pendencias) {
+      <div class="erro-box" role="alert">
+        <strong>Não é possível publicar ainda.</strong>
+        <ul>
+          @for (item of pendencias | keyvalue; track item.key) {
+            <li>{{ item.value }}</li>
+          }
+        </ul>
+      </div>
+    }
+    <div class="field">
+      <label for="comentario">Comentário do professor</label
+      ><textarea
+        id="comentario"
+        class="input"
+        formControlName="comentario"
+        placeholder="Explique a resposta correta"
+      ></textarea>
+    </div>
+    <p class="erro" role="alert">{{ store.erro() }}</p>
+    <div class="actions">
+      <a class="btn btn-secondary" routerLink="/admin/questoes">Cancelar</a
+      ><button class="btn btn-secondary" type="submit" [disabled]="store.salvando()">
+        Salvar rascunho
+      </button>
+      @if (store.questao()?.status === 'RASCUNHO') {
+        <button class="btn btn-primary" type="button" (click)="enviar()">
+          Enviar para revisão
+        </button>
+      }
+      @if (podePublicar() && store.questao() && store.questao()?.status !== 'PUBLICADA') {
+        <button class="btn btn-primary" type="button" (click)="publicar()">Publicar</button>
+      }
+    </div>
+  </form>
+  @if (tipoPendente()) {
+    <app-confirmacao-dialog
+      titulo="Trocar tipo da questão"
+      mensagem="Ao trocar o tipo, as alternativas serão descartadas e o gabarito será limpo. Continuar?"
+      confirmarLabel="Trocar"
+      (confirmado)="confirmarTrocaTipo()"
+      (cancelado)="cancelarTrocaTipo()"
+    />
+  }
+</div>

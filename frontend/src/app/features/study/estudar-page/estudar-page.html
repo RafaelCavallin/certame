@@ -1,0 +1,100 @@
+@if (preparando()) {
+  @if (erro()) {
+    <p class="erro erro-preparo" role="alert">{{ erro() }}</p>
+  }
+  <app-painel-filtros
+    variante="preparo"
+    [modoInicial]="modoInicial()"
+    (aplicar)="iniciar($event)"
+  />
+} @else if (correcao(); as resultado) {
+  <app-correcao-prova [correcao]="resultado" (refazer)="reiniciar()" (inicio)="voltarInicio()" />
+} @else if (carregando()) {
+  <p>Carregando sessão...</p>
+} @else if (store.questaoAtual(); as questao) {
+  <div class="layout-estudo" [class.com-filtros]="store.modo() === 'CONTEXTO'">
+    @if (store.modo() === 'CONTEXTO') {
+      <app-painel-filtros (aplicar)="aplicarFiltrosLaterais($event)" />
+    }
+    <div
+      class="estudo"
+      appAtalhosTeclado
+      (alternativa)="selecionar($event)"
+      (acao)="
+        $event === 'confirmar'
+          ? responder()
+          : $event === 'anterior'
+            ? anterior()
+            : $event === 'proxima'
+              ? proximo()
+              : null
+      "
+    >
+      <header class="cabecalho-estudo">
+        <div>
+          <span class="eyebrow">Sessão · {{ store.sessao()?.total }} questões</span>
+          <h1>Resolver questões</h1>
+        </div>
+      </header>
+      @if (erro()) {
+        <p class="erro" role="alert">{{ erro() }}</p>
+      }
+      <app-painel-navegacao
+        [total]="store.sessao()?.total ?? 0"
+        [atual]="store.indice()"
+        [respondidas]="respondidas()"
+        [modo]="store.modo()!"
+        (selecionar)="selecionarIndice($event)"
+      /><app-questao-cartao
+        [questao]="questao"
+        [marcada]="selecionada()"
+        [modo]="store.modo()!"
+        [bloqueada]="!store.emProva() && !!store.respostaDa(questao.id)"
+        [criadosNaSessao]="criadosFlashcards()"
+        (selecionar)="selecionar($event)"
+        (marcar)="alternarMarcacao(questao, $event)"
+        (novoFlashcard)="abrirFlashcard()"
+        (adicionarCaderno)="abrirAdicionarCaderno()"
+      />
+      @if (!store.emProva() && store.respostaDa(questao.id); as resposta) {
+        <app-gabarito-painel [resposta]="resposta" />
+      }
+      <app-barra-acao
+        [primeiro]="store.indice() === 0"
+        [ultimo]="store.indice() === (store.sessao()?.total ?? 1) - 1"
+        [prova]="store.emProva()"
+        [respondida]="!!store.respostaDa(questao.id)"
+        (anterior)="anterior()"
+        (proxima)="proximo()"
+        (confirmar)="responder()"
+        (finalizar)="pedirFinalizacao()"
+      />
+      @if (adicionandoCaderno()) {
+        <app-adicionar-caderno-dialog
+          [questaoId]="questao.id"
+          (fechado)="fecharAdicionarCaderno()"
+          (adicionada)="aoAdicionarCaderno($event)"
+        />
+      }
+      @if (confirmandoFinalizacao()) {
+        <app-confirmacao-dialog
+          titulo="Finalizar sessão"
+          [mensagem]="
+            store.emProva()
+              ? 'As respostas marcadas serão corrigidas e a sessão será encerrada.'
+              : 'A sessão será encerrada e o cronômetro parado. As questões ainda não respondidas contarão como não respondidas.'
+          "
+          confirmarLabel="Finalizar"
+          (confirmado)="finalizar()"
+          (cancelado)="cancelarFinalizacao()"
+        />
+      }
+    </div>
+  </div>
+} @else {
+  <app-painel-filtros
+    variante="preparo"
+    [modoInicial]="store.modo() ?? modoInicial()"
+    (aplicar)="iniciar($event)"
+  />
+}

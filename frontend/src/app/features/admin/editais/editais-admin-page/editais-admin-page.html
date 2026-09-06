@@ -1,0 +1,85 @@
+<div class="admin-page">
+  <div class="toolbar">
+    <h1>Editais</h1>
+    <a class="btn btn-primary" routerLink="/admin/editais/novo"
+      ><i class="ph ph-plus"></i> Novo edital</a
+    >
+  </div>
+  @if (store.erroLista()) {
+    <p class="erro" role="alert">{{ store.erroLista() }}</p>
+  }
+  @if (!store.carregandoLista() && !store.editais().length) {
+    <div class="empty card elev-sm">
+      <h3>Nenhum edital cadastrado</h3>
+      <p class="text-muted">
+        Cadastre o primeiro edital para que ele apareça na visão do estudante.
+      </p>
+    </div>
+  } @else {
+    <div class="card elev-sm table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Status</th>
+            <th>Banca</th>
+            <th>Vagas</th>
+            <th>Prazo</th>
+            <th>Disciplinas</th>
+            <th class="acoes">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (edital of store.editais(); track edital.id) {
+            <tr>
+              <td class="nome">{{ edital.nome }}</td>
+              <td>
+                <span [class]="classeStatus(edital.status)">{{ rotuloStatus(edital.status) }}</span>
+              </td>
+              <td>{{ edital.banca?.nome ?? '—' }}</td>
+              <td>{{ edital.vagas != null ? (edital.vagas | number: '1.0-0') : 'A definir' }}</td>
+              <td>
+                {{
+                  edital.prazoInscricao
+                    ? (edital.prazoInscricao | date: 'dd/MM/yyyy' : 'UTC')
+                    : 'A definir'
+                }}
+                @if (edital.prazoVencido) {
+                  <div class="aviso-prazo">
+                    <i class="ph ph-warning-circle"></i>prazo vencido, revisar
+                  </div>
+                }
+              </td>
+              <td>{{ edital.totalDisciplinas }}</td>
+              <td class="acoes">
+                <a
+                  class="btn btn-icon btn-ghost"
+                  [routerLink]="['/admin/editais', edital.id]"
+                  title="Editar"
+                  ><i class="ph ph-pencil-simple"></i
+                ></a>
+                <button
+                  class="btn btn-icon btn-ghost danger"
+                  type="button"
+                  title="Excluir"
+                  (click)="confirmarExclusao(edital.id)"
+                >
+                  <i class="ph ph-trash"></i>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (exclusaoId(); as id) {
+    <app-confirmacao-dialog
+      titulo="Excluir edital"
+      mensagem="O edital deixará de aparecer na visão do estudante."
+      confirmarLabel="Excluir"
+      (confirmado)="excluir()"
+      (cancelado)="exclusaoId.set(null)"
+    />
+  }
+</div>

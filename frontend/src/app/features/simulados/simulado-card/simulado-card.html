@@ -1,0 +1,43 @@
+<article
+  class="card elev-sm simulado-card"
+  [class.simulado-card--agendado]="!concluido() && resumo().estado === 'AGENDADO'"
+>
+  <span class="icone">
+    <i
+      class="ph"
+      [class.ph-play]="!concluido() && resumo().estado === 'DISPONIVEL'"
+      [class.ph-calendar-blank]="!concluido() && resumo().estado === 'AGENDADO'"
+      [class.ph-check]="concluido()"
+      aria-hidden="true"
+    ></i>
+  </span>
+  <div class="corpo">
+    <h3>{{ simulado().nome }}</h3>
+    <p class="text-muted">
+      {{ simulado().codigo }} · {{ simulado().banca || 'Banca não informada' }}
+    </p>
+    <p class="meta">
+      {{ simulado().numeroQuestoes }} questões · {{ duracao(simulado().duracaoSegundos) }}
+    </p>
+  </div>
+  <div class="acao">
+    @if (concluido()) {
+      <div class="resultado">
+        <strong>{{ historico().nota }}%</strong>
+        <small>concluído em {{ historico().concluidoEm | date: 'dd/MM/yyyy' }}</small>
+      </div>
+      <div class="botoes">
+        <button class="btn btn-secondary" type="button" (click)="revisar.emit()">Revisar</button>
+      </div>
+    } @else {
+      <span class="tag" [class.tag-accent]="resumo().estado === 'DISPONIVEL'" [class.tag-neutral]="resumo().estado !== 'DISPONIVEL'">
+        {{ resumo().estado === 'DISPONIVEL' ? 'Disponível' : 'Agendado' }}
+      </span>
+      @if (resumo().estado === 'DISPONIVEL') {
+        <button class="btn btn-primary" type="button" (click)="iniciar.emit()">
+          {{ resumo().tentativaEmAndamentoId ? 'Retomar' : 'Iniciar' }}
+        </button>
+      }
+    }
+  </div>
+</article>

@@ -1,0 +1,48 @@
+.chart-wrap {
+  overflow-x: auto;
+}
+svg {
+  display: block;
+  min-width: 560px;
+  width: 100%;
+  height: 220px;
+  overflow: visible;
+}
+.grade {
+  stroke: var(--color-divider);
+  stroke-width: 1;
+}
+.barra {
+  fill: var(--color-neutral-800);
+}
+.area {
+  fill: color-mix(in srgb, var(--color-accent) 32%, transparent);
+  opacity: 0.7;
+}
+.linha {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 2.5;
+}
+.ponto {
+  fill: var(--color-bg);
+  stroke: var(--color-accent);
+  stroke-width: 2;
+}
+.rotulo {
+  fill: var(--color-accent-200);
+  font-family: var(--font-heading);
+  font-size: 11px;
+}
+.eixo,
+svg text:not(.rotulo) {
+  fill: var(--color-neutral-500);
+  font-size: 10px;
+}
+.ponto:focus {
+  outline: none;
+  stroke: var(--color-accent-200);
+}
+.table {
+  margin-top: var(--space-2);
+}

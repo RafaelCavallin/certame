@@ -1,0 +1,98 @@
+<div class="cadernos-page">
+  <div class="cabecalho">
+    <p class="text-muted">Organize questões em listas para revisar quando quiser.</p>
+    <button class="btn btn-primary" type="button" (click)="abrirDialog()">
+      <i class="ph ph-plus"></i> Novo caderno
+    </button>
+  </div>
+  @if (store.erro()) {
+    <p class="erro" role="alert">{{ store.erro() }}</p>
+  }
+  @if (store.vazio()) {
+    <app-estado-vazio
+      titulo="Você ainda não tem cadernos"
+      orientacao="Crie um caderno para reunir questões e voltar a elas quando quiser."
+      acaoLabel="Criar primeiro caderno"
+      (acao)="abrirDialog()"
+    />
+  } @else {
+    <div class="grade">
+      @for (caderno of store.cadernos(); track caderno.id) {
+        <article class="card elev-sm caderno">
+          <div class="topo">
+            <span class="icone"
+              ><i
+                class="ph"
+                [class.ph-warning-circle]="caderno.id === 'auto:ERRO_RECORRENTE'"
+                [class.ph-star]="caderno.id === 'auto:FAVORITA'"
+                [class.ph-notebook]="caderno.tipo === 'MANUAL'"
+              ></i
+            ></span>
+            @if (caderno.editavel) {
+              <button
+                class="btn btn-icon btn-secondary menu"
+                type="button"
+                [attr.aria-label]="'Ações do caderno ' + caderno.nome"
+                (click)="abrirMenu(caderno)"
+              >
+                <i class="ph ph-dots-three"></i>
+              </button>
+            }
+          </div>
+          <div>
+            <div class="card-title">{{ caderno.nome }}</div>
+            <p class="descricao">{{ caderno.descricao }}</p>
+          </div>
+          <div class="barra"><span [style.width.%]="caderno.progressoPercentual"></span></div>
+          <div class="card-meta">
+            <i class="ph ph-list-checks"></i> {{ caderno.questoesRespondidas }}/{{
+              caderno.totalQuestoes
+            }}
+            · <i class="ph ph-clock"></i> {{ atualizado(caderno.atualizadoEm) }}
+          </div>
+          <button
+            class="btn btn-primary estudar"
+            type="button"
+            [disabled]="caderno.totalQuestoes === 0"
+            (click)="estudar(caderno)"
+          >
+            <i class="ph ph-play"></i> Estudar esse caderno
+          </button>
+          @if (menu()?.id === caderno.id) {
+            <div class="acoes">
+              <button class="btn btn-secondary" type="button" (click)="abrirDialog(caderno)">
+                <i class="ph ph-pencil-simple"></i> Renomear</button
+              ><button class="btn btn-secondary" type="button" (click)="abrirPicker(caderno)">
+                <i class="ph ph-list-plus"></i> Adicionar questões</button
+              ><button
+                class="btn btn-secondary excluir"
+                type="button"
+                (click)="excluir.set(caderno)"
+              >
+                <i class="ph ph-trash"></i> Excluir
+              </button>
+            </div>
+          }
+        </article>
+      }
+    </div>
+  }
+  @if (dialogAberto()) {
+    <app-caderno-dialog [caderno]="dialog()" (salvo)="fecharDialog()" (fechado)="fecharDialog()" />
+  }
+  @if (picker(); as caderno) {
+    <app-questoes-picker-dialog
+      [caderno]="{ id: caderno.id, nome: caderno.nome }"
+      (fechado)="picker.set(null)"
+      (selecionadas)="adicionar($event)"
+    />
+  }
+  @if (excluir(); as caderno) {
+    <app-confirmacao-dialog
+      titulo="Excluir caderno"
+      [mensagem]="'Excluir ' + caderno.nome + '? As questões não serão apagadas.'"
+      (cancelado)="excluir.set(null)"
+      (confirmado)="confirmarExclusao()"
+    />
+  }
+</div>

@@ -1,0 +1,7 @@
+# Artefatos gerados — nunca formatar nem exigir no gate
+/dist
+/coverage
+/.angular
+/test-results
+/playwright-report
+/node_modules

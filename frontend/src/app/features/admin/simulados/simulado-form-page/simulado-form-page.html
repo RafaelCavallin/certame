@@ -1,0 +1,120 @@
+<div class="form-page">
+  <a class="btn btn-ghost" routerLink="/admin/simulados"
+    ><i class="ph ph-arrow-left"></i> Voltar para simulados</a
+  >
+  <form class="card" [formGroup]="formulario" (ngSubmit)="salvar()">
+    <div class="form-heading">
+      <div>
+        <h1>{{ detalhe() ? 'Editar simulado' : 'Novo simulado' }}</h1>
+        @if (detalhe(); as d) {
+          <span class="tag tag-neutral">{{ d.codigo }}</span>
+        }
+      </div>
+      @if (detalhe(); as d) {
+        <span class="tag tag-neutral">{{
+          d.status === 'PUBLICADO'
+            ? 'Publicado'
+            : d.status === 'ENCERRADO'
+              ? 'Encerrado'
+              : 'Rascunho'
+        }}</span>
+      }
+    </div>
+    <div class="field">
+      <label for="nome">Nome</label><input id="nome" class="input" formControlName="nome" />
+      @if (mensagem('nome'); as m) {
+        <small class="erro">{{ m }}</small>
+      }
+    </div>
+    <div class="field">
+      <label for="descricao">Descrição</label
+      ><textarea id="descricao" class="input" formControlName="descricao"></textarea>
+    </div>
+    <div class="grid">
+      <div class="field">
+        <label for="banca">Banca</label
+        ><select id="banca" class="input" formControlName="bancaId">
+          <option [ngValue]="null">Sem banca</option>
+          @for (banca of bancas(); track banca.id) {
+            <option [value]="banca.id">{{ banca.nome }}</option>
+          }
+        </select>
+      </div>
+      <div class="field">
+        <label for="numeroQuestoes">Número de questões</label
+        ><input id="numeroQuestoes" class="input" type="number" formControlName="numeroQuestoes" />
+      </div>
+      <div class="field">
+        <label for="duracao">Duração (segundos)</label
+        ><input id="duracao" class="input" type="number" formControlName="duracaoSegundos" />
+      </div>
+      <div class="field">
+        <label for="abertura">Abertura</label
+        ><input
+          id="abertura"
+          class="input"
+          type="datetime-local"
+          formControlName="janelaAbertura"
+        />
+        @if (mensagem('janelaAbertura'); as m) {
+          <small class="erro">{{ m }}</small>
+        }
+      </div>
+      <div class="field">
+        <label for="encerramento">Encerramento</label
+        ><input
+          id="encerramento"
+          class="input"
+          type="datetime-local"
+          formControlName="janelaEncerramento"
+        />
+        @if (mensagem('janelaEncerramento'); as m) {
+          <small class="erro">{{ m }}</small>
+        }
+      </div>
+    </div>
+    <p class="erro" role="alert">{{ erro() }}</p>
+    <div class="actions">
+      <a class="btn btn-secondary" routerLink="/admin/simulados">Cancelar</a
+      ><button class="btn btn-secondary" type="submit">Salvar rascunho</button>
+      @if (detalhe()?.status === 'PUBLICADO') {
+        @if (podePublicar()) {
+          <button class="btn btn-secondary" type="button" (click)="despublicar()">
+            Despublicar
+          </button>
+        }
+      } @else if (detalhe()) {
+        @if (podePublicar()) {
+          <button
+            class="btn btn-primary"
+            type="button"
+            [disabled]="!detalhe()?.composicao.fechada"
+            (click)="publicar()"
+          >
+            Publicar
+          </button>
+        }
+        <button class="btn btn-ghost" type="button" (click)="excluir()">Excluir</button>
+      }
+    </div>
+  </form>
+  @if (detalhe(); as d) {
+    <app-composicao-disciplinas
+      [simuladoId]="d.id"
+      [resumo]="d.composicao"
+      (alterado)="atualizouComposicao($event)"
+    />
+  }
+  @if (fieldErrors()['composicao']; as m) {
+    <p class="erro" role="alert">{{ m }}</p>
+  }
+  @if (confirmacaoExclusao()) {
+    <app-confirmacao-dialog
+      titulo="Excluir simulado"
+      mensagem="Esta ação não pode ser desfeita."
+      confirmarLabel="Excluir"
+      (confirmado)="confirmarExclusao()"
+      (cancelado)="cancelarExclusao()"
+    />
+  }
+</div>

@@ -1,0 +1,56 @@
+<div style="padding: 26px 28px; max-width: 1160px">
+  <a routerLink="/flashcards" class="btn btn-ghost" style="margin-bottom: 14px; padding: 0"
+    ><i class="ph ph-arrow-left"></i> Voltar para meus flashcards</a
+  >
+  <div
+    style="
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    "
+  >
+    <div>
+      <div style="font-family: var(--font-heading); font-size: 19px">Decks</div>
+      <div style="font-size: 12.5px; color: var(--color-neutral-400)">
+        {{ estatisticasLabel() }}
+      </div>
+    </div>
+    <button class="btn btn-primary" type="button" (click)="abrirNovo()">
+      <i class="ph ph-folder-plus"></i> Novo deck
+    </button>
+  </div>
+
+  @if (store.carregando()) {
+    <p style="color: var(--color-neutral-400); font-size: 13px">Carregando decks…</p>
+  } @else {
+    <div class="grade-decks">
+      @for (deck of store.decks(); track deck.id ?? 'sem-deck') {
+        <app-deck-card
+          [deck]="deck"
+          (editar)="editar($event)"
+          (excluir)="pedirExclusao($event)"
+          (estudar)="estudar($event)"
+        />
+      }
+    </div>
+  }
+</div>
+
+@if (excluindo(); as deck) {
+  <app-confirmacao-dialog
+    titulo="Excluir deck"
+    [mensagem]="
+      'Excluir ' +
+      deck.nome +
+      '? Os ' +
+      deck.totalCards +
+      ' cards vão para Sem deck — nenhum card é apagado.'
+    "
+    confirmarLabel="Excluir deck"
+    (confirmado)="confirmarExclusao()"
+    (cancelado)="excluindo.set(null)"
+  />
+}

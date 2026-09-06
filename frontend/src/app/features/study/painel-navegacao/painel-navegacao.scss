@@ -1,0 +1,50 @@
+.navegacao-serie {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  /* Mesma coluna de leitura do cartão da questão. */
+  max-width: 760px;
+  margin: 0 auto var(--space-8);
+}
+.navegacao-serie--grade {
+  max-width: none;
+  margin-inline: 0;
+}
+.navegacao-serie button {
+  width: 32px;
+  height: 32px;
+  color: var(--color-neutral-400);
+  background: transparent;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+.navegacao-serie button:hover {
+  color: var(--color-text);
+  border-color: var(--color-neutral-600);
+}
+.navegacao-serie button.respondida {
+  color: var(--color-text);
+  border-color: color-mix(in srgb, var(--color-accent) 55%, transparent);
+  background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+}
+.navegacao-serie button.ativa {
+  color: var(--color-bg);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  font-weight: 600;
+}
+.navegacao-serie--grade {
+  flex-direction: column;
+  align-items: stretch;
+}
+.navegacao-serie--grade .titulo {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  margin-bottom: var(--space-4);
+}
+.navegacao-serie--grade .grade {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--space-2);
+}

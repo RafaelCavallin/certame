@@ -1,0 +1,33 @@
+<div class="barra">
+  <button
+    class="btn btn-secondary"
+    type="button"
+    [disabled]="primeiro()"
+    (click)="anterior.emit()"
+  >
+    Anterior
+  </button>
+  @if (prova()) {
+    <button class="btn btn-primary" type="button" (click)="finalizar.emit()">
+      Finalizar prova
+    </button>
+  } @else if (respondida()) {
+    <button class="btn btn-primary" type="button" [disabled]="ultimo()" (click)="proxima.emit()">
+      Próxima questão
+    </button>
+  } @else {
+    <button class="btn btn-primary" type="button" (click)="confirmar.emit()">
+      {{ ultimo() ? 'Responder' : 'Responder e continuar' }}
+    </button>
+  }
+  @if (!respondida() || prova()) {
+    <button class="btn btn-secondary" type="button" [disabled]="ultimo()" (click)="proxima.emit()">
+      Próxima
+    </button>
+  }
+  @if (!prova()) {
+    <button class="btn btn-secondary btn-finalizar-sessao" type="button" (click)="finalizar.emit()">
+      Finalizar sessão
+    </button>
+  }
+</div>

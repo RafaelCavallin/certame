@@ -1,0 +1,83 @@
+<div class="materias">
+  <div class="heading">
+    <div>
+      <h1>Disciplinas e assuntos</h1>
+      <p class="text-muted">Organize a taxonomia do banco de questões.</p>
+    </div>
+    <button class="btn btn-primary" (click)="abrir('disciplina')">
+      <i class="ph ph-plus"></i> Disciplina
+    </button>
+  </div>
+  <p class="erro">{{ erro() }}</p>
+  <div class="card elev-sm">
+    @for (d of arvore(); track d.id) {
+      <div class="disciplina">
+        <div class="linha">
+          <strong>{{ d.nome }}</strong
+          ><span>{{ d.totalQuestoes }} questões</span
+          ><button
+            class="btn btn-icon btn-ghost"
+            title="Editar disciplina"
+            (click)="abrir('disciplina', d.id)"
+          >
+            <i class="ph ph-pencil-simple"></i></button
+          ><button
+            class="btn btn-icon btn-ghost"
+            title="Adicionar assunto"
+            (click)="abrir('assunto', undefined, d.id)"
+          >
+            <i class="ph ph-plus"></i>
+          </button>
+        </div>
+        @for (a of d.assuntos; track a.id) {
+          <div class="assunto">
+            <span>{{ a.nome }}</span
+            ><span>{{ a.totalQuestoes }}</span
+            ><button
+              class="btn btn-icon btn-ghost"
+              title="Editar assunto"
+              (click)="abrir('assunto', a.id, d.id)"
+            >
+              <i class="ph ph-pencil-simple"></i></button
+            ><button
+              class="btn btn-icon btn-ghost"
+              title="Excluir assunto"
+              (click)="abrirExcluir('assunto', a.id)"
+            >
+              <i class="ph ph-trash"></i>
+            </button>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
+@if (dialog(); as d) {
+  @if (d.arquivar) {
+    <app-confirmacao-dialog
+      [titulo]="'Não é possível excluir este assunto'"
+      [mensagem]="recusa() ?? ''"
+      [varianteArquivar]="true"
+      (confirmado)="arquivar()"
+      (cancelado)="dialog.set(null); recusa.set(null)"
+    />
+  } @else if (d.excluir) {
+    <app-confirmacao-dialog
+      [titulo]="'Excluir ' + d.tipo"
+      [mensagem]="'A exclusão será recusada se houver questões vinculadas.'"
+      (confirmado)="excluir()"
+      (cancelado)="dialog.set(null)"
+    />
+  } @else {
+    <div class="dialog-backdrop">
+      <section class="dialog" role="dialog" aria-modal="true">
+        <h2 class="dialog-title">{{ d.id ? 'Renomear' : 'Criar' }} {{ d.tipo }}</h2>
+        <input class="input" aria-label="Nome" [(ngModel)]="nome" />
+        <div class="dialog-actions">
+          <button class="btn btn-secondary" (click)="dialog.set(null)">Cancelar</button
+          ><button class="btn btn-primary" (click)="salvar()">Salvar</button>
+        </div>
+      </section>
+    </div>
+  }
+}

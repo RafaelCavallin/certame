@@ -1,0 +1,25 @@
+services:
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: certame_dev
+      POSTGRES_USER: certame
+      POSTGRES_PASSWORD: certame
+    ports:
+      - "55432:5432"
+    volumes:
+      - certame-postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U certame -d certame_dev"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    ports:
+      - "55525:1025"
+      - "58025:8025"
+
+volumes:
+  certame-postgres-data:

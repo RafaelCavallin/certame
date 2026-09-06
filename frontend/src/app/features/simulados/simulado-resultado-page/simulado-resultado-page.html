@@ -1,0 +1,56 @@
+<main class="resultado-page">
+  @if (erro()) {
+    <p class="erro" role="alert">{{ erro() }}</p>
+  }
+  @if (resultado(); as resultado) {
+    <a class="btn btn-ghost" routerLink="/simulados">← Voltar para simulados</a>
+    <header>
+      <p class="eyebrow">{{ resultado.codigo }} · Resultado</p>
+      <h1>{{ resultado.nome }}</h1>
+      <p class="text-muted">
+        Finalizado em {{ resultado.finalizadaEm | date: 'dd/MM/yyyy HH:mm' }}
+      </p>
+    </header>
+    @if (resultado.tipo === 'TREINO') {
+      <p class="aviso">
+        Esta foi uma tentativa de treino. Sua nota registrada permanece em
+        {{ resultado.notaRegistrada }}%.
+      </p>
+    }
+    <section class="indicadores">
+      <article class="card elev-sm">
+        <span>Nota</span><strong>{{ resultado.nota }}%</strong>
+      </article>
+      <article class="card elev-sm">
+        <span>Acertos</span><strong>{{ resultado.acertos }}</strong>
+      </article>
+      <article class="card elev-sm">
+        <span>Erros</span><strong>{{ resultado.erros }}</strong>
+      </article>
+      <article class="card elev-sm">
+        <span>Não respondidas</span><strong>{{ resultado.naoRespondidas }}</strong>
+      </article>
+      <article class="card elev-sm">
+        <span>Tempo total</span><strong>{{ tempo(resultado.tempoTotalSegundos) }}</strong>
+      </article>
+    </section>
+    <section class="revisao">
+      <h2>Revisão questão a questão</h2>
+      @for (item of resultado.correcao.itens; track item.questaoId) {
+        <article class="card elev-sm item">
+          <div>
+            <strong>{{ item.ordem }}. {{ item.codigo }}</strong>
+            <p>{{ item.enunciadoResumo }}</p>
+          </div>
+          <span [class.correta]="item.correta === true" [class.incorreta]="item.correta === false"
+            >{{ item.marcada ? 'Marcada: ' + item.marcada : 'Não respondida' }} · Gabarito:
+            {{ item.gabarito }}</span
+          >
+          @if (item.comentario) {
+            <p class="comentario">{{ item.comentario }}</p>
+          }
+        </article>
+      }
+    </section>
+  }
+</main>

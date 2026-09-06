@@ -1,0 +1,18 @@
+.estado-vazio {
+  border: 1px dashed var(--color-divider);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  text-align: center;
+}
+.estado-vazio > i {
+  color: var(--color-neutral-500);
+  font-size: 28px;
+}
+.estado-vazio h2 {
+  font-size: 17px;
+  margin: 10px 0 6px;
+}
+.estado-vazio p {
+  font-size: 13px;
+  margin: 0 0 16px;
+}

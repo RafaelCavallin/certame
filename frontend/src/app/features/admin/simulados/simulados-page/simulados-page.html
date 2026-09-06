@@ -1,0 +1,83 @@
+<div class="admin-page">
+  <div class="toolbar">
+    <div class="filters">
+      <input
+        class="input busca"
+        aria-label="Buscar simulados"
+        placeholder="Buscar por código ou nome"
+        [(ngModel)]="q"
+        (keyup.enter)="aplicar()"
+      /><select class="input" aria-label="Status" [(ngModel)]="estado">
+        <option value="">Todos os status</option>
+        <option value="RASCUNHO">Rascunho</option>
+        <option value="AGENDADO">Agendado</option>
+        <option value="DISPONIVEL">Disponível</option>
+        <option value="ENCERRADO">Encerrado</option></select
+      ><select class="input" aria-label="Banca" [(ngModel)]="bancaId">
+        <option value="">Todas as bancas</option>
+        @for (b of bancas(); track b.id) {
+          <option [value]="b.id">{{ b.nome }}</option>
+        }</select
+      ><button class="btn btn-secondary" type="button" (click)="aplicar()">Filtrar</button>
+    </div>
+    <a class="btn btn-primary" routerLink="/admin/simulados/nova"
+      ><i class="ph ph-plus"></i> Novo simulado</a
+    >
+  </div>
+  @if (erro()) {
+    <p class="erro" role="alert">{{ erro() }}</p>
+  }
+  @if (!pagina().content.length) {
+    <div class="empty card elev-sm">
+      <h3>Nenhum simulado encontrado</h3>
+      <p class="text-muted">Ajuste os filtros ou crie um novo simulado.</p>
+    </div>
+  } @else {
+    <div class="card elev-sm table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Cód.</th>
+            <th>Nome</th>
+            <th>Banca</th>
+            <th>Questões</th>
+            <th>Duração</th>
+            <th>Status</th>
+            <th>Composição</th>
+            <th>Tentativas</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (simulado of pagina().content; track simulado.id) {
+            <tr>
+              <td>{{ simulado.codigo }}</td>
+              <td>
+                <a [routerLink]="['/admin/simulados', simulado.id]">{{ simulado.nome }}</a>
+              </td>
+              <td>{{ simulado.banca || '—' }}</td>
+              <td>{{ simulado.numeroQuestoes }}</td>
+              <td>{{ duracao(simulado.duracaoSegundos) }}</td>
+              <td>
+                <span class="tag tag-neutral">{{ statusLabel(simulado.estado) }}</span>
+              </td>
+              <td>{{ simulado.composicaoFechada ? 'Fechada' : 'Incompleta' }}</td>
+              <td>{{ simulado.tentativasConcluidas }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination">
+      <button class="btn btn-secondary" [disabled]="page === 0" (click)="mudarPagina(-1)">
+        Anterior</button
+      ><span>Página {{ page + 1 }}</span
+      ><button
+        class="btn btn-secondary"
+        [disabled]="(page + 1) * pagina().size >= pagina().totalElements"
+        (click)="mudarPagina(1)"
+      >
+        Próxima
+      </button>
+    </div>
+  }
+</div>

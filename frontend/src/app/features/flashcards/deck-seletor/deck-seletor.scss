@@ -1,0 +1,35 @@
+.novo-deck {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.novo-deck__nome {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 38px;
+}
+
+.novo-deck__acoes {
+  display: flex;
+  gap: var(--space-2);
+  width: 100%;
+
+  .btn {
+    flex: 1;
+    padding: 6px 12px;
+  }
+
+  .btn-secondary {
+    border-color: var(--color-divider);
+  }
+}
+
+.erro-campo {
+  display: block;
+  margin-top: var(--space-1);
+  color: var(--color-danger-300);
+  font-size: 12px;
+}

@@ -1,0 +1,219 @@
+<div style="display: flex; justify-content: space-between; align-items: center">
+  <h3 class="dialog-title" style="margin: 0; display: flex; align-items: center; gap: 9px">
+    <i class="ph ph-lightning" style="color: var(--color-accent)"></i
+    >{{ store.modoEdicao() ? 'Editar flashcard' : 'Novo flashcard' }}
+  </h3>
+  <button
+    class="btn btn-icon btn-secondary"
+    type="button"
+    (click)="aoCancelar()"
+    style="border-color: transparent"
+    aria-label="Fechar"
+  >
+    <i class="ph ph-x"></i>
+  </button>
+</div>
+
+@if (!store.modoAvulso() && !store.modoEdicao()) {
+  <div
+    style="
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 12px;
+      border-radius: var(--radius-md);
+      background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+      font-size: 12.5px;
+      color: var(--color-accent-200);
+      margin-bottom: 2px;
+    "
+  >
+    <i class="ph ph-link-simple"></i
+    ><span>Vinculado à questão em tela — {{ store.rotuloContexto() }}</span>
+  </div>
+}
+@if (!store.modoAvulso() && store.modoEdicao()) {
+  <div
+    style="
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 12px;
+      border-radius: var(--radius-md);
+      background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+      font-size: 12.5px;
+      color: var(--color-accent-200);
+      margin-bottom: 2px;
+    "
+  >
+    <i class="ph ph-link-simple"></i
+    ><span
+      >Criado a partir da questão {{ store.editando()?.origem?.codigo }} — disciplina e assunto
+      herdados</span
+    >
+  </div>
+}
+
+<form [formGroup]="store.form">
+  <div class="field">
+    <label for="fc-frente"
+      >Frente
+      <span style="color: var(--color-neutral-500); font-weight: 400"
+        >— a pergunta ou o gatilho</span
+      ></label
+    >
+    <textarea
+      id="fc-frente"
+      class="input"
+      placeholder="Ex.: Efeitos da decisão de mérito em ADI"
+      formControlName="frente"
+      style="min-height: 58px"
+    ></textarea>
+    @if (store.erroDeCampo().frente; as mensagem) {
+      <span class="erro-campo">{{ mensagem }}</span>
+    }
+  </div>
+  <div class="field">
+    <label for="fc-verso"
+      >Verso
+      <span style="color: var(--color-neutral-500); font-weight: 400">— a resposta</span></label
+    >
+    <textarea
+      id="fc-verso"
+      class="input"
+      placeholder="Ex.: Eficácia erga omnes e efeito vinculante (art. 102, §2º, CF)"
+      formControlName="verso"
+      style="min-height: 78px"
+    ></textarea>
+    @if (store.erroDeCampo().verso; as mensagem) {
+      <span class="erro-campo">{{ mensagem }}</span>
+    }
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px">
+    <app-deck-seletor [valor]="store.deckId()" (selecionado)="onDeckSelecionado($event)" />
+    <div class="field" style="margin: 0">
+      <label for="fc-tags">Tags</label
+      ><input id="fc-tags" class="input" placeholder="adi, stf" formControlName="tags" />
+    </div>
+  </div>
+
+  @if (!store.modoAvulso()) {
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px">
+      <div class="field" style="margin: 0">
+        <label>Disciplina</label
+        ><input class="input" [value]="store.nomeDisciplinaLeitura()" disabled />
+      </div>
+      <div class="field" style="margin: 0">
+        <label>Assunto</label><input class="input" [value]="store.nomeAssuntoLeitura()" disabled />
+      </div>
+    </div>
+  } @else {
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px">
+      <div class="field" style="margin: 0">
+        <label for="fc-disciplina">Disciplina</label>
+        <select
+          id="fc-disciplina"
+          class="input"
+          formControlName="disciplinaId"
+          style="cursor: pointer"
+          (change)="store.aoTrocarDisciplina()"
+        >
+          <option [ngValue]="null">Selecione</option>
+          @for (disciplina of store.disciplinas(); track disciplina.id) {
+            <option [value]="disciplina.id">{{ disciplina.nome }}</option>
+          }
+        </select>
+      </div>
+      <div class="field" style="margin: 0">
+        <label for="fc-assunto">Assunto</label>
+        <select id="fc-assunto" class="input" formControlName="assuntoId" style="cursor: pointer">
+          <option [ngValue]="null">Selecione</option>
+          @for (assunto of store.assuntos(); track assunto.id) {
+            <option [value]="assunto.id">{{ assunto.nome }}</option>
+          }
+        </select>
+      </div>
+    </div>
+  }
+</form>
+
+@if (store.erroGeral(); as mensagem) {
+  <div class="erro-api" role="alert">
+    <i class="ph ph-warning-circle"></i><span>{{ mensagem }}</span>
+  </div>
+}
+
+@if (store.confirmandoDescarte()) {
+  <div
+    style="
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-accent);
+      font-size: 13px;
+      color: var(--color-neutral-200);
+      margin-top: 12px;
+    "
+  >
+    <span style="flex: 1">Descartar este flashcard? O texto digitado será perdido.</span>
+    <button
+      class="btn btn-ghost"
+      type="button"
+      (click)="continuarEditando()"
+      style="padding: 2px 8px"
+    >
+      Continuar editando
+    </button>
+    <button
+      class="btn btn-secondary"
+      type="button"
+      (click)="confirmarDescarte()"
+      style="
+        border-color: var(--color-danger-300);
+        color: var(--color-danger-300);
+        padding: 2px 10px;
+      "
+    >
+      Descartar
+    </button>
+  </div>
+}
+
+<div class="dialog-actions" style="gap: 8px">
+  <button
+    class="btn btn-secondary"
+    type="button"
+    (click)="aoCancelar()"
+    style="border-color: var(--color-divider)"
+  >
+    Cancelar
+  </button>
+  @if (!store.modoEdicao()) {
+    <button
+      class="btn btn-secondary"
+      type="button"
+      (click)="salvarECriarOutro()"
+      [disabled]="store.enviando()"
+      style="border-color: var(--color-divider)"
+    >
+      <i class="ph ph-plus"></i> Salvar e criar outro
+    </button>
+  }
+  <button
+    class="btn btn-primary"
+    type="button"
+    (click)="salvarEFechar()"
+    [disabled]="store.enviando()"
+  >
+    <i class="ph ph-check"></i> {{ store.modoEdicao() ? 'Salvar alterações' : 'Salvar e fechar' }}
+  </button>
+</div>
+@if (store.contexto()) {
+  <div style="font-size: 11.5px; color: var(--color-neutral-500); margin-top: 10px">
+    A sessão de questões continua no mesmo lugar: alternativa marcada, número da questão e
+    cronômetro seguem intactos.
+  </div>
+}

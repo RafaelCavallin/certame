@@ -1,0 +1,37 @@
+<article class="card elev-sm pontos">
+  <h2>Pontos de atenção</h2>
+  @if (dados().itens.length) {
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Assunto</th>
+            <th>Disciplina</th>
+            <th>Resolvidas</th>
+            <th>Acerto</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (ponto of dados().itens; track ponto.assuntoId) {
+            <tr>
+              <td class="assunto">{{ ponto.assunto }}</td>
+              <td>{{ ponto.disciplina }}</td>
+              <td>{{ ponto.volume.toLocaleString('pt-BR') }}</td>
+              <td>{{ ponto.pctAcerto }}%</td>
+              <td>
+                <button class="btn btn-ghost" type="button" (click)="treinar.emit(ponto.assuntoId)">
+                  Treinar
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  } @else {
+    <p class="text-muted">
+      Nenhum assunto atingiu {{ dados().minimoRespostas.toLocaleString('pt-BR') }} respostas ainda.
+    </p>
+  }
+</article>

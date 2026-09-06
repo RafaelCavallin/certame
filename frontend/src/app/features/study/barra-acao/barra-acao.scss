@@ -1,0 +1,16 @@
+/* A barra fica com a mesma largura do cartão da questão para que os botões
+   se alinhem à coluna de leitura. */
+.barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  max-width: 760px;
+  margin: var(--space-8) auto 0;
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-divider);
+}
+/* A ação principal e o encerramento vão para a direita; navegação à esquerda. */
+.barra .btn-primary {
+  margin-left: auto;
+}

@@ -1,0 +1,56 @@
+@if (erro()) {
+  <p class="erro">{{ erro() }}</p>
+}
+<div class="inicio">
+  <div class="titulo">
+    <div>
+      <span class="eyebrow">Visão geral</span>
+      <h1>Continue seus estudos</h1>
+      <p class="text-muted">Seu resumo de hoje, sem distrações.</p>
+    </div>
+    <button class="btn btn-primary" (click)="iniciar()">
+      Começar a estudar <i class="ph ph-arrow-right"></i>
+    </button>
+  </div>
+  @if (resumo(); as dados) {
+    <div class="cards">
+      <article>
+        <span>Questões resolvidas</span><strong>{{ dados.questoesResolvidas }}</strong
+        ><small>Hoje</small>
+      </article>
+      <article>
+        <span>Percentual de acerto</span
+        ><strong>{{ dados.pctAcerto === null ? '—' : dados.pctAcerto + '%' }}</strong
+        ><small>Hoje</small>
+      </article>
+      <article>
+        <span>Tempo de estudo</span><strong>{{ tempo(dados.tempoEstudoSegundos) }}</strong
+        ><small>Questões e flashcards</small>
+      </article>
+    </div>
+    @if (dados.sessoesRetomaveis.length > 0) {
+      <div class="retomaveis">
+        @for (sessao of dados.sessoesRetomaveis; track sessao.sessaoId) {
+          <article class="retomar">
+            <div>
+              <span class="eyebrow">Sessão em andamento</span>
+              <h2>{{ sessao.titulo || 'Estudo livre' }}</h2>
+              <p class="text-muted">
+                Retome de onde parou · questão {{ questaoAtual(sessao) }} de {{ sessao.total }}
+              </p>
+            </div>
+            <button class="btn btn-secondary" (click)="continuar(sessao.sessaoId)">
+              Continuar <i class="ph ph-arrow-right"></i>
+            </button>
+          </article>
+        }
+      </div>
+    } @else {
+      <div class="vazio">
+        <i class="ph ph-sparkle"></i>
+        <h2>Nenhuma questão hoje</h2>
+        <p class="text-muted">Comece uma sessão para construir seu ritmo.</p>
+      </div>
+    }
+  }
+</div>

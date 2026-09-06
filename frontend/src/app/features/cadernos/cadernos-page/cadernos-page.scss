@@ -1,0 +1,91 @@
+.cadernos-page {
+  padding: 26px 28px;
+  max-width: 1160px;
+}
+.cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.cabecalho p {
+  margin: 0;
+  font-size: 14px;
+}
+.grade {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+}
+.caderno {
+  gap: 12px;
+}
+.topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.icone {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-md);
+  background: var(--color-neutral-800);
+  color: var(--color-neutral-100);
+  font-size: 20px;
+}
+.menu {
+  border-color: transparent;
+  width: 30px;
+  height: 30px;
+}
+.descricao {
+  color: var(--color-neutral-400);
+  font-size: 12px;
+  min-height: 38px;
+  margin: 0;
+}
+.barra {
+  height: 6px;
+  border-radius: var(--radius-sm);
+  background: var(--color-neutral-900);
+  overflow: hidden;
+}
+.barra span {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-sm);
+  background: var(--color-accent);
+}
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-divider);
+}
+.excluir {
+  color: var(--color-danger-300);
+}
+.estudar {
+  width: 100%;
+  justify-content: center;
+}
+.erro {
+  color: var(--color-danger-300);
+  font-size: 13px;
+}
+@media (max-width: 760px) {
+  .cadernos-page {
+    padding: var(--space-4);
+  }
+  .cabecalho {
+    align-items: flex-start;
+    gap: var(--space-3);
+    flex-direction: column;
+  }
+  .grade {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,2 @@
+E2E-04 PASSOU 2026-09-05
+administrador monta e publica simulado via /admin/simulados (composicao soma exibida, publicar apos fechar)

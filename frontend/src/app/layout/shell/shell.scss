@@ -1,0 +1,236 @@
+:host {
+  display: block;
+  height: 100dvh;
+}
+.shell {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+  background: var(--color-bg);
+}
+.navegacao {
+  width: 236px;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  background: color-mix(in srgb, var(--color-surface) 55%, var(--color-bg));
+  border-right: 1px solid var(--color-divider);
+}
+.marca {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 18px 18px 16px;
+  font: 600 17px var(--font-heading);
+}
+.marca-icone {
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-md);
+  color: var(--color-bg);
+  background: var(--color-accent);
+}
+.navegacao nav {
+  display: grid;
+  gap: var(--space-1);
+  padding: 6px 12px 12px;
+}
+.secao {
+  padding: 12px 10px 6px;
+  color: var(--color-neutral-500);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.navegacao a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: var(--radius-md);
+  color: var(--color-neutral-400);
+  text-decoration: none;
+  font-size: 13px;
+}
+.navegacao a:hover,
+.navegacao a.ativa {
+  color: var(--color-text);
+  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+}
+.contador {
+  margin-left: auto;
+  font-size: 10px;
+  padding: 1px 7px;
+  border-radius: 20px;
+  background: var(--color-accent);
+  color: var(--color-bg);
+  font-family: var(--font-body);
+}
+.rodape {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 12px;
+  border-top: 1px solid var(--color-divider);
+}
+.identidade {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
+}
+.identidade div {
+  min-width: 0;
+  display: grid;
+}
+.identidade strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font: 13px var(--font-heading);
+}
+.identidade small {
+  color: var(--color-neutral-400);
+  font-size: 11px;
+}
+.avatar {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  border-radius: 50%;
+  color: var(--color-accent-100);
+  background: var(--color-accent-800);
+  font: 13px var(--font-heading);
+}
+.sair {
+  flex: none;
+  border-color: transparent;
+}
+.conteudo {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+}
+.conteudo header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  height: 60px;
+  flex: none;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--color-divider);
+}
+.conteudo header .titulo {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+.conteudo header strong {
+  font: 17px var(--font-heading);
+}
+.conteudo header .titulo span {
+  color: var(--color-neutral-500);
+  font-size: 11px;
+}
+/* Cronômetro: presente e legível de relance no canto do cabeçalho, sem
+   animação nem cor forte que dispute a atenção com a questão em tela. */
+.cronometro {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex: none;
+  height: 34px;
+  padding: 0 var(--space-2) 0 var(--space-4);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 26%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+}
+.cronometro .sinal {
+  width: 6px;
+  height: 6px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--color-accent-400);
+}
+.cronometro .tempo {
+  color: var(--color-accent-200);
+  font:
+    600 16px/1 ui-monospace,
+    'SFMono-Regular',
+    'Menlo',
+    monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+.cronometro .alternar {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  color: var(--color-neutral-400);
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+}
+.cronometro .alternar:hover {
+  color: var(--color-text);
+  background: color-mix(in srgb, var(--color-accent) 20%, transparent);
+}
+.cronometro .alternar:focus-visible {
+  outline: 2px solid var(--color-accent-400);
+  outline-offset: 1px;
+}
+/* Pausado sai do acento e vai para o neutro: o relógio continua visível,
+   mas deixa de sinalizar sessão em curso. */
+.cronometro.pausado {
+  border-color: var(--color-neutral-800);
+  background: color-mix(in srgb, var(--color-neutral-500) 10%, transparent);
+}
+.cronometro.pausado .sinal {
+  background: var(--color-neutral-600);
+}
+.cronometro.pausado .tempo {
+  color: var(--color-neutral-400);
+}
+.conteudo section {
+  flex: 1;
+  overflow: auto;
+  padding: 28px;
+}
+@media (max-width: 720px) {
+  .navegacao {
+    width: 64px;
+  }
+  .marca {
+    justify-content: center;
+    padding-inline: 0;
+  }
+  .marca > span:last-child,
+  .navegacao a:not(.ativa) {
+    font-size: 0;
+  }
+  .navegacao a {
+    justify-content: center;
+  }
+  .secao,
+  .identidade {
+    display: none;
+  }
+  .rodape {
+    justify-content: center;
+    padding-inline: 4px;
+  }
+  .conteudo section {
+    padding: 20px;
+  }
+}

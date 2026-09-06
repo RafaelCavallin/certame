@@ -1,0 +1,15 @@
+<article class="proximo">
+  <div>
+    <span class="eyebrow">Próximo simulado</span>
+    <h2>{{ simulado().nome }}</h2>
+    <p>
+      {{ simulado().numeroQuestoes }} questões · {{ duracao(simulado().duracaoSegundos) }} ·
+      {{ simulado().banca || 'Banca não informada' }}
+    </p>
+    <small>Abertura em {{ simulado().janelaAbertura | date: 'dd/MM/yyyy HH:mm' }}</small>
+  </div>
+  <div class="contagem">
+    <strong>{{ restante() }}</strong
+    ><span>até a abertura</span>
+  </div>
+</article>

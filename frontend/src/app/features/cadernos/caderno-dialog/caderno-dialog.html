@@ -1,0 +1,51 @@
+<div class="dialog-backdrop" (click)="fechado.emit()">
+  <section class="dialog" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+    <header>
+      <h2 class="dialog-title">
+        <i class="ph ph-notebook"></i>{{ editando ? 'Renomear caderno' : 'Novo caderno' }}
+      </h2>
+      <button
+        class="btn btn-icon btn-secondary"
+        type="button"
+        aria-label="Fechar diálogo"
+        (click)="fechado.emit()"
+      >
+        <i class="ph ph-x"></i>
+      </button>
+    </header>
+    <form [formGroup]="form" (ngSubmit)="salvar()">
+      <div class="field">
+        <label for="nome-caderno">Nome do caderno</label
+        ><input
+          id="nome-caderno"
+          class="input"
+          formControlName="nome"
+          placeholder="Ex.: Revisão de Direito Administrativo"
+          aria-describedby="nome-erro"
+        />
+        <div id="nome-erro" class="erro" role="alert">
+          @if (form.controls.nome.hasError('api')) {
+            {{ form.controls.nome.getError('api') }}
+          } @else if (form.controls.nome.touched && form.controls.nome.invalid) {
+            Informe um nome entre 3 e 80 caracteres.
+          }
+        </div>
+      </div>
+      <div class="field">
+        <label for="descricao-caderno">Descrição <span class="text-muted">(opcional)</span></label
+        ><textarea
+          id="descricao-caderno"
+          class="input"
+          formControlName="descricao"
+          placeholder="O que você quer revisar neste caderno?"
+        ></textarea>
+      </div>
+      <div class="dialog-actions">
+        <button class="btn btn-secondary" type="button" (click)="fechado.emit()">Cancelar</button
+        ><button class="btn btn-primary" type="submit" [disabled]="enviando()">
+          <i class="ph ph-check"></i>{{ editando ? 'Salvar alterações' : 'Criar caderno' }}
+        </button>
+      </div>
+    </form>
+  </section>
+</div>

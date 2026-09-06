@@ -1,0 +1,15 @@
+:host {
+  display: block;
+}
+
+.grade-decks {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 720px) {
+  .grade-decks {
+    grid-template-columns: 1fr;
+  }
+}

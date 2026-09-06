@@ -1,0 +1,104 @@
+<div style="display: flex; justify-content: space-between; align-items: center">
+  <h3 class="dialog-title" style="margin: 0; display: flex; align-items: center; gap: 9px">
+    <i class="ph ph-folders" style="color: var(--color-accent)"></i
+    >{{ editando ? 'Configurar deck' : 'Novo deck' }}
+  </h3>
+  <button
+    class="btn btn-icon btn-secondary"
+    type="button"
+    (click)="cancelar()"
+    style="border-color: transparent"
+    aria-label="Fechar"
+  >
+    <i class="ph ph-x"></i>
+  </button>
+</div>
+
+<form [formGroup]="form">
+  <div class="field">
+    <label for="deck-nome">Nome do deck</label>
+    <input
+      id="deck-nome"
+      class="input"
+      placeholder="Ex.: Constitucional — controle"
+      formControlName="nome"
+    />
+    @if (form.controls.nome.touched && form.controls.nome.invalid) {
+      <span class="erro-campo">O nome do deck deve ter entre 3 e 60 caracteres.</span>
+    }
+  </div>
+  <div class="field">
+    <label for="deck-descricao">Descrição</label>
+    <input
+      id="deck-descricao"
+      class="input"
+      placeholder="O que este deck cobre"
+      formControlName="descricao"
+    />
+  </div>
+
+  <div
+    style="
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-neutral-500);
+      margin: 6px 0 10px;
+    "
+  >
+    Agendamento deste deck
+  </div>
+  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px">
+    <div class="field" style="margin: 0">
+      <label for="deck-novos">Novos por dia</label>
+      <input id="deck-novos" class="input" type="number" formControlName="novosDia" />
+    </div>
+    <div class="field" style="margin: 0">
+      <label for="deck-revisoes">Revisões por dia</label>
+      <input id="deck-revisoes" class="input" type="number" formControlName="revisoesDia" />
+    </div>
+    <div class="field" style="margin: 0">
+      <label for="deck-intervalo">Intervalo máx. (dias)</label>
+      <input id="deck-intervalo" class="input" type="number" formControlName="intervaloMaxDias" />
+    </div>
+  </div>
+  <div class="field" style="margin-top: 12px">
+    <label for="deck-retencao"
+      >Retenção desejada
+      <span style="color: var(--color-neutral-500); font-weight: 400"
+        >— alvo do FSRS ao calcular o intervalo</span
+      ></label
+    >
+    <select id="deck-retencao" class="input" formControlName="retencaoAlvo" style="cursor: pointer">
+      <option [ngValue]="0.8">80% — intervalos longos, menos revisão</option>
+      <option [ngValue]="0.85">85% — equilíbrio com folga</option>
+      <option [ngValue]="0.9">90% — padrão recomendado</option>
+      <option [ngValue]="0.95">95% — retenção alta, mais revisão</option>
+    </select>
+  </div>
+</form>
+
+@if (store.erroDeCampo().nome; as mensagem) {
+  <div class="erro-api" role="alert">
+    <i class="ph ph-warning-circle"></i><span>{{ mensagem }}</span>
+  </div>
+}
+
+<div class="dialog-actions">
+  <button
+    class="btn btn-secondary"
+    type="button"
+    (click)="cancelar()"
+    style="border-color: var(--color-divider)"
+  >
+    Cancelar
+  </button>
+  <button class="btn btn-primary" type="button" (click)="salvar()" [disabled]="store.salvando()">
+    <i class="ph ph-check"></i> Salvar deck
+  </button>
+</div>
+<div style="font-size: 11.5px; color: var(--color-neutral-500); margin-top: 10px">
+  Os limites valem para a montagem da fila diária deste deck; a retenção alimenta o FSRS no cálculo
+  de cada intervalo. Renomear o deck move todos os cards com ele; excluir envia os cards para "Sem
+  deck".
+</div>

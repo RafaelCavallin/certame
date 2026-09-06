@@ -1,0 +1,32 @@
+.editais-page {
+  padding: 26px 28px;
+  max-width: 1160px;
+}
+.secoes {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+.cabecalho-secao {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.cabecalho-secao h4 {
+  margin: 0;
+  font-size: 16px;
+}
+.contagem {
+  font-size: 12px;
+  color: var(--color-neutral-400);
+}
+.secoes p {
+  font-size: 13px;
+  margin: 0;
+}
+.grade {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}

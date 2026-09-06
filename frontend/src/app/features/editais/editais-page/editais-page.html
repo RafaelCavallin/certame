@@ -1,0 +1,30 @@
+<div class="editais-page">
+  @if (store.vazio()) {
+    <app-estado-vazio
+      titulo="Nenhum edital acompanhado no momento."
+      orientacao="Assim que a administração cadastrar editais, eles aparecem aqui organizados por status."
+    />
+  } @else {
+    <div class="secoes">
+      @for (secao of secoes(); track secao.titulo) {
+        <section>
+          <div class="cabecalho-secao">
+            <h4>{{ secao.titulo }}</h4>
+            <span class="contagem">{{ secao.editais.length }}</span>
+          </div>
+          @if (secao.editais.length === 0) {
+            <p class="text-muted">{{ secao.mensagemVazia }}</p>
+          }
+          <div class="grade">
+            @for (edital of secao.editais; track edital.id) {
+              <app-edital-card
+                [edital]="edital"
+                [selecionado]="store.selecionado()?.id === edital.id"
+              />
+            }
+          </div>
+        </section>
+      }
+    </div>
+  }
+</div>

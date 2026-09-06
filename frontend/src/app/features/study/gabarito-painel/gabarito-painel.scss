@@ -1,0 +1,50 @@
+.painel-gabarito {
+  max-width: 760px;
+  margin: var(--space-6) auto 0;
+  padding: var(--space-6);
+  border: 1px solid var(--color-divider);
+  border-left: 3px solid var(--color-danger);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+.painel-gabarito.correta {
+  border-left-color: var(--color-accent);
+}
+.veredito {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+.veredito i {
+  font-size: 18px;
+  line-height: 1;
+  color: var(--color-danger);
+}
+.painel-gabarito.correta .veredito i {
+  color: var(--color-accent);
+}
+.veredito strong {
+  font-family: var(--font-heading);
+  font-size: 16px;
+}
+.gabarito {
+  margin-left: auto;
+  color: var(--color-neutral-400);
+  font-size: 13px;
+}
+.estatistica {
+  margin: var(--space-3) 0 0;
+  color: var(--color-neutral-500);
+  font-size: 13px;
+}
+/* A explicação é o que o estudante realmente lê depois de errar:
+   corpo maior e mais respirado que o restante do painel. */
+.comentario {
+  margin: var(--space-6) 0 0;
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-divider);
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--color-neutral-200);
+}

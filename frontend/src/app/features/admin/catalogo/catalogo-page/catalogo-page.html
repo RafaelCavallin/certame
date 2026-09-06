@@ -1,0 +1,69 @@
+<div class="catalogo">
+  <div class="heading">
+    <div>
+      <h1>Bancas e órgãos</h1>
+      <p class="text-muted">Itens disponíveis nos combos das questões.</p>
+    </div>
+    <button class="btn btn-primary" (click)="abrir()"><i class="ph ph-plus"></i> Novo item</button>
+  </div>
+  <div class="seg tabs">
+    <button class="seg-opt" [class.ativo]="aba() === 'banca'" (click)="trocar('banca')">
+      Bancas</button
+    ><button class="seg-opt" [class.ativo]="aba() === 'orgao'" (click)="trocar('orgao')">
+      Órgãos
+    </button>
+  </div>
+  <p class="erro">{{ erro() }}</p>
+  <div class="card elev-sm">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Sigla</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of itens(); track item.id) {
+          <tr>
+            <td>{{ item.nome }}</td>
+            <td>{{ item.sigla || '—' }}</td>
+            <td class="acoes">
+              <button class="btn btn-icon btn-ghost" title="Editar" (click)="abrir(item)">
+                <i class="ph ph-pencil-simple"></i></button
+              ><button
+                class="btn btn-icon btn-ghost danger"
+                title="Excluir"
+                (click)="excluir(item.id)"
+              >
+                <i class="ph ph-trash"></i>
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  @if (formAberto()) {
+    <div class="dialog-backdrop">
+      <section class="dialog" role="dialog" aria-modal="true">
+        <h2 class="dialog-title">{{ editando() ? 'Editar' : 'Novo' }} item</h2>
+        <label class="field">Nome<input class="input" [(ngModel)]="nome" /></label
+        ><label class="field">Sigla <input class="input" [(ngModel)]="sigla" /></label>
+        <div class="dialog-actions">
+          <button class="btn btn-secondary" (click)="limpar()">Cancelar</button
+          ><button class="btn btn-primary" (click)="salvar()">Salvar</button>
+        </div>
+      </section>
+    </div>
+  }
+  @if (dialog()) {
+    <app-confirmacao-dialog
+      [titulo]="'Excluir item'"
+      [mensagem]="'A exclusão é recusada quando existem questões vinculadas.'"
+      confirmarLabel="Excluir"
+      (confirmado)="confirmarExclusao()"
+      (cancelado)="dialog.set(null)"
+    />
+  }
+</div>

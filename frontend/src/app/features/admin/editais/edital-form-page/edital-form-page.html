@@ -1,0 +1,109 @@
+<div class="form-page">
+  <a class="btn btn-ghost" routerLink="/admin/editais"
+    ><i class="ph ph-arrow-left"></i> Voltar para editais</a
+  >
+  <form class="card elev-sm" [formGroup]="store.formulario" (ngSubmit)="salvar()">
+    <h1>{{ store.editalId() ? 'Editar edital' : 'Novo edital' }}</h1>
+    <div class="field">
+      <label for="nome">Nome do edital</label>
+      <input
+        id="nome"
+        class="input"
+        formControlName="nome"
+        placeholder="Ex.: TRF 1ª Região — Analista Judiciário"
+      />
+      @if (mensagem('nome'); as m) {
+        <small class="erro">{{ m }}</small>
+      }
+    </div>
+    <div class="field">
+      <label>Status</label>
+      <div class="seg">
+        <label class="seg-opt"
+          ><input type="radio" name="status" formControlName="status" value="ABERTO" />
+          Aberto</label
+        >
+        <label class="seg-opt"
+          ><input type="radio" name="status" formControlName="status" value="PREVISTO" />
+          Previsto</label
+        >
+        <label class="seg-opt"
+          ><input type="radio" name="status" formControlName="status" value="ENCERRADO" />
+          Encerrado</label
+        >
+      </div>
+    </div>
+    <div class="grid">
+      <div class="field">
+        <label for="vagas">Vagas</label>
+        <input
+          id="vagas"
+          class="input"
+          type="number"
+          min="0"
+          max="999999"
+          formControlName="vagas"
+          placeholder="Ex.: 320"
+        />
+      </div>
+      <div class="field">
+        <label for="prazo">Prazo de inscrição</label>
+        <input id="prazo" class="input" type="date" formControlName="prazoInscricao" />
+        @if (mensagem('prazoInscricao'); as m) {
+          <small class="erro">{{ m }}</small>
+        }
+      </div>
+      <div class="field">
+        <label for="banca">Banca</label>
+        <select id="banca" class="input" formControlName="bancaId">
+          <option [ngValue]="null">Selecione uma banca</option>
+          @for (b of store.bancas(); track b.id) {
+            <option [value]="b.id">{{ b.nome }}</option>
+          }
+        </select>
+      </div>
+      <div class="field">
+        <label for="orgao">Órgão</label>
+        <select id="orgao" class="input" formControlName="orgaoId">
+          <option [ngValue]="null">Selecione um órgão</option>
+          @for (o of store.orgaos(); track o.id) {
+            <option [value]="o.id">{{ o.nome }}</option>
+          }
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label for="url">URL oficial</label>
+      <input
+        id="url"
+        class="input"
+        type="url"
+        formControlName="urlOficial"
+        placeholder="https://…"
+      />
+      @if (mensagem('urlOficial'); as m) {
+        <small class="erro">{{ m }}</small>
+      }
+    </div>
+    @if (store.avisoPrazoAusente()) {
+      <div class="aviso" role="alert">
+        <i class="ph ph-warning-circle"></i>Editais com status "Aberto" exigem prazo de inscrição.
+      </div>
+    }
+    <div class="field">
+      <label>Disciplinas exigidas</label>
+      <app-disciplinas-seletor
+        [disciplinas]="store.disciplinasDisponiveis()"
+        [selecionados]="store.disciplinasSelecionadas() ?? []"
+        (alterado)="store.formulario.controls.disciplinaIds.setValue($event)"
+      />
+    </div>
+    <p class="erro" role="alert">{{ store.erro() }}</p>
+    <div class="actions">
+      <a class="btn btn-secondary" routerLink="/admin/editais">Cancelar</a>
+      <button class="btn btn-primary" type="submit" [disabled]="store.salvando()">
+        {{ store.editalId() ? 'Salvar alterações' : 'Cadastrar edital' }}
+      </button>
+    </div>
+  </form>
+</div>

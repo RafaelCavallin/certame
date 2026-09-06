@@ -1,0 +1,81 @@
+<div class="shell">
+  <aside class="navegacao">
+    <div class="marca">
+      <span class="marca-icone"><i class="ph-fill ph-medal"></i></span><span>Certame</span>
+    </div>
+    <nav aria-label="Navegação principal">
+      <span class="secao">Estudo</span
+      ><a routerLink="/inicio" routerLinkActive="ativa"><i class="ph ph-house"></i>Início</a
+      ><a routerLink="/estudar" routerLinkActive="ativa"
+        ><i class="ph ph-books"></i>Resolver questões</a
+      ><a routerLink="/cadernos"><i class="ph ph-bookmark-simple"></i>Cadernos</a
+      ><a routerLink="/editais"><i class="ph ph-scroll"></i>Editais</a
+      ><a routerLink="/simulados"><i class="ph ph-clipboard-text"></i>Simulados</a
+      ><a routerLink="/flashcards" routerLinkActive="ativa"
+        ><i class="ph ph-lightning"></i>Flashcards
+        @if (flashcardsVencendoHoje()) {
+          <span class="contador">{{ flashcardsVencendoHoje() }}</span>
+        }</a
+      ><a routerLink="/desempenho"><i class="ph ph-chart-line-up"></i>Desempenho</a>
+      @if (podeAdministrar()) {
+        <span class="secao">Administração</span
+        ><a routerLink="/admin/questoes"><i class="ph ph-list-checks"></i>Questões</a
+        ><a routerLink="/admin/materias"><i class="ph ph-tree-structure"></i>Matérias</a
+        ><a routerLink="/admin/simulados"><i class="ph ph-clipboard-text"></i>Simulados</a>
+      }
+      @if (podeGerenciarEditais()) {
+        <a routerLink="/admin/editais"><i class="ph ph-scroll"></i>Editais</a>
+      }
+      @if (podeCatalogo()) {
+        <a routerLink="/admin/catalogo"><i class="ph ph-buildings"></i>Catálogo</a>
+      }
+      @if (podeSuper()) {
+        <a routerLink="/super/usuarios"><i class="ph ph-users-three"></i>Usuários</a>
+      }
+    </nav>
+    <div class="rodape">
+      <div class="identidade">
+        <span class="avatar">{{ (auth.usuario()?.nome ?? 'U').slice(0, 2).toUpperCase() }}</span>
+        <div>
+          <strong>{{ auth.usuario()?.nome }}</strong
+          ><small>{{ auth.perfil() }}</small>
+        </div>
+      </div>
+      <button class="btn btn-icon btn-secondary sair" type="button" title="Sair" (click)="sair()">
+        <i class="ph ph-sign-out"></i>
+      </button>
+    </div>
+  </aside>
+  <main class="conteudo">
+    <header>
+      <div class="titulo">
+        <strong>{{ emEstudo() ? 'Resolver questões' : titulo() }}</strong
+        ><span>{{
+          emEstudo() ? (emSessao() ? 'Sessão em andamento' : 'Monte sua sessão') : subtitulo()
+        }}</span>
+      </div>
+      @if (emSessao()) {
+        <div class="cronometro" [class.pausado]="cronometro.pausado()">
+          <span class="sinal" aria-hidden="true"></span>
+          <span class="tempo" role="timer" aria-live="off" [attr.aria-label]="rotuloTempo()">{{
+            tempo()
+          }}</span>
+          <button
+            class="alternar"
+            type="button"
+            [title]="cronometro.pausado() ? 'Retomar cronômetro' : 'Pausar cronômetro'"
+            [attr.aria-label]="cronometro.pausado() ? 'Retomar cronômetro' : 'Pausar cronômetro'"
+            (click)="cronometro.alternarPausa()"
+          >
+            <i
+              class="ph"
+              [class.ph-play]="cronometro.pausado()"
+              [class.ph-pause]="!cronometro.pausado()"
+            ></i>
+          </button>
+        </div>
+      }
+    </header>
+    <section tabindex="0"><router-outlet /></section>
+  </main>
+</div>

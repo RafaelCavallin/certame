@@ -1,0 +1,15 @@
+Frontend coverage (ng test:coverage 2026-09-03T22:32:48)
+Statements   : 87.49% ( 3708/4238 )
+Branches     : 83.62% ( 1210/1447 )
+Functions    : 82.89% ( 567/684 )
+Lines        : 94.93% ( 1801/1897 )
+Threshold 80% -> PASSOU
+Test Files 71 passed, Tests 362 passed
+
+Backend unit (editais domain) - /tmp worktree to avoid accented path
+./mvnw test -Dtest="VerificadorPrazoEditalTest,ResolvedorDisciplinasEditalTest,EditalServiceTest,ConsultaEditaisServiceTest" -> 27 passed (2026-09-03T19:21)
+./mvnw test -Dtest="EditalControllerTest,EditalAdminControllerTest" -> 13 passed (2026-09-03T19:25)
+./mvnw test -Dtest="EditalPersistenciaTest" -> 6 passed (2026-09-03T19:30)
+./mvnw test -Dtest="EditalIntegracaoTest" -> 5 passed (2026-09-03T19:32)
+Total TI relevantes executados em isolado: 24 (13 slice + 6 persistencia + 5 integracao), 0 falhas
+Workaround: war packaging + path com acentos ("Área de trabalho") causava FileNotFound para ManipuladorErrosGlobal - resolvido via rsync para /tmp/certame-backend

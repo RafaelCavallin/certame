@@ -1,0 +1,79 @@
+<div class="form-page">
+  <a class="btn btn-ghost" routerLink="/super/usuarios"
+    ><i class="ph ph-arrow-left"></i> Voltar para usuários</a
+  >
+  <form class="card elev-sm" [formGroup]="store.formulario" (ngSubmit)="salvar()">
+    <h1>{{ store.usuarioEditando() ? 'Editar usuário' : 'Novo usuário' }}</h1>
+    <div class="field">
+      <label for="nome">Nome completo</label>
+      <input id="nome" class="input" formControlName="nome" placeholder="Ex.: João Pereira" />
+      @if (mensagem('nome'); as m) {
+        <small class="erro">{{ m }}</small>
+      }
+    </div>
+    <div class="field">
+      <label for="email">E-mail</label>
+      <input
+        id="email"
+        class="input"
+        type="email"
+        formControlName="email"
+        placeholder="joao.pereira@email.com"
+      />
+      @if (mensagem('email'); as m) {
+        <small class="erro">{{ m }}</small>
+      }
+    </div>
+    <div class="field">
+      <label>Perfil de acesso</label>
+      <div class="seg">
+        <label class="seg-opt"
+          ><input type="radio" formControlName="perfil" [value]="PerfilUsuario.ESTUDANTE" />
+          Estudante</label
+        >
+        <label class="seg-opt"
+          ><input type="radio" formControlName="perfil" [value]="PerfilUsuario.PROFESSOR" />
+          Professor</label
+        >
+        <label class="seg-opt"
+          ><input type="radio" formControlName="perfil" [value]="PerfilUsuario.ADMIN" />
+          Administrador</label
+        >
+        <label class="seg-opt"
+          ><input type="radio" formControlName="perfil" [value]="PerfilUsuario.SUPER_ADMIN" /> Super
+          admin</label
+        >
+      </div>
+    </div>
+    <div class="field">
+      <label>Status</label>
+      <div class="seg">
+        <label class="seg-opt"
+          ><input type="radio" formControlName="status" [value]="StatusUsuario.CONVITE_PENDENTE" />
+          Convite pendente</label
+        >
+        <label class="seg-opt"
+          ><input type="radio" formControlName="status" [value]="StatusUsuario.ATIVO" />
+          Ativo</label
+        >
+        <label class="seg-opt"
+          ><input type="radio" formControlName="status" [value]="StatusUsuario.INATIVO" />
+          Inativo</label
+        >
+      </div>
+    </div>
+    <label class="radio checkbox">
+      <input type="checkbox" formControlName="enviarConvite" />
+      <span>Enviar convite por e-mail com link de definição de senha</span>
+    </label>
+    @if (store.erro()) {
+      <p class="erro" role="alert">{{ store.erro() }}</p>
+    }
+    <div class="actions">
+      <a class="btn btn-secondary" routerLink="/super/usuarios">Cancelar</a>
+      <button class="btn btn-primary" type="submit" [disabled]="store.salvando()">
+        {{ store.usuarioEditando() ? 'Salvar alterações' : 'Criar usuário' }}
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,65 @@
+<div class="dialog-backdrop" (click)="fechado.emit()">
+  <section class="dialog picker" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+    <header>
+      <h2 class="dialog-title"><i class="ph ph-list-plus"></i> Adicionar questões</h2>
+      <button
+        class="btn btn-icon btn-secondary"
+        type="button"
+        aria-label="Fechar seleção"
+        (click)="fechado.emit()"
+      >
+        <i class="ph ph-x"></i>
+      </button>
+    </header>
+    <p class="dialog-body">
+      Selecione uma ou mais questões para o caderno <strong>{{ caderno().nome }}</strong
+      >.
+    </p>
+    @if (erro()) {
+      <p class="erro" role="alert">{{ erro() }}</p>
+    } @else if (carregando()) {
+      <p class="text-muted">Carregando questões...</p>
+    } @else {
+      <div class="tabela">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Selecionar</th>
+              <th>Código</th>
+              <th>Enunciado</th>
+              <th>Disciplina</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (questao of questoes(); track questao.id) {
+              <tr>
+                <td>
+                  <input
+                    type="checkbox"
+                    [checked]="marcadas().has(questao.id)"
+                    (change)="alternar(questao.id)"
+                    [attr.aria-label]="'Selecionar ' + questao.codigo"
+                  />
+                </td>
+                <td>{{ questao.codigo }}</td>
+                <td>{{ questao.enunciadoResumo }}</td>
+                <td>{{ questao.disciplina }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+    <div class="dialog-actions">
+      <button class="btn btn-secondary" type="button" (click)="fechado.emit()">Cancelar</button
+      ><button
+        class="btn btn-primary"
+        type="button"
+        [disabled]="!marcadas().size"
+        (click)="adicionar()"
+      >
+        <i class="ph ph-plus"></i> Adicionar selecionadas
+      </button>
+    </div>
+  </section>
+</div>

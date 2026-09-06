@@ -1,0 +1,25 @@
+.composicao {
+  display: grid;
+  gap: var(--space-4);
+}
+.section-heading,
+.composicao-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+}
+.quantidade {
+  max-width: 110px;
+}
+.table-wrap {
+  overflow-x: auto;
+}
+.table {
+  min-width: 620px;
+}
+.aviso,
+.erro {
+  color: var(--color-danger-300);
+  font-size: 13px;
+}

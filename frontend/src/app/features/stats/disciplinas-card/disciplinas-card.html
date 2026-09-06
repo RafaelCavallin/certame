@@ -1,0 +1,13 @@
+<article class="card elev-sm disciplinas">
+  <h2>Aproveitamento por disciplina</h2>
+  @for (disciplina of disciplinas(); track disciplina.disciplinaId) {
+    <div class="disciplina">
+      <div class="linha">
+        <span>{{ disciplina.disciplina }}</span
+        ><span>{{ disciplina.pctAcerto }}%</span>
+      </div>
+      <div class="volume">{{ disciplina.volume.toLocaleString('pt-BR') }} questões</div>
+      <div class="trilho"><span [style.width.%]="disciplina.pctAcerto"></span></div>
+    </div>
+  }
+</article>

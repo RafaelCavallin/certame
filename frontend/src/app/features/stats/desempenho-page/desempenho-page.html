@@ -1,0 +1,55 @@
+<main class="desempenho-page">
+  <div class="cabecalho">
+    <p class="text-muted">Acompanhe sua evolução e descubra onde concentrar seus estudos.</p>
+  </div>
+  @if (store.erro()) {
+    <p class="erro" role="alert">{{ store.erro() }}</p>
+  }
+  @if (!store.carregando() && !store.possuiHistorico()) {
+    <app-estado-vazio
+      titulo="Seu desempenho começa aqui"
+      orientacao="Resolva algumas questões para acompanhar sua evolução, suas disciplinas e seus pontos de atenção."
+      acaoLabel="Começar a estudar"
+      (acao)="estudar()"
+    />
+  }
+  @if (store.possuiHistorico() && store.evolucao() && store.pontosFracos()) {
+    <section class="indicadores">
+      @if (store.resumo(); as resumo) {
+        <article class="card elev-sm">
+          <span class="card-kicker">Total resolvidas</span
+          ><strong>{{ resumo.totalRespostas.toLocaleString('pt-BR') }}</strong>
+        </article>
+        <article class="card elev-sm">
+          <span class="card-kicker">Acertos</span
+          ><strong class="acento">{{ resumo.acertos.toLocaleString('pt-BR') }}</strong>
+        </article>
+        <article class="card elev-sm">
+          <span class="card-kicker">Erros</span
+          ><strong>{{ resumo.erros.toLocaleString('pt-BR') }}</strong>
+        </article>
+        <article class="card elev-sm">
+          <span class="card-kicker">Aproveitamento</span
+          ><strong>{{
+            resumo.pctAproveitamento === null ? 'Não disponível' : resumo.pctAproveitamento + '%'
+          }}</strong>
+        </article>
+      }
+    </section>
+    <section class="paineis">
+      <article class="card elev-sm evolucao">
+        <div class="titulo">
+          <h2>Evolução do aproveitamento — últimas 8 semanas</h2>
+          <span class="text-muted">% aproveitamento · questões/semana</span>
+        </div>
+        <app-evolucao-chart
+          [evolucao]="store.evolucao()!"
+          [segmentos]="store.segmentosLinha()"
+          [serie]="store.serieTextual()"
+        />
+      </article>
+      <app-disciplinas-card [disciplinas]="store.disciplinas()" />
+    </section>
+    <app-pontos-fracos-table [dados]="store.pontosFracos()!" (treinar)="treinar($event)" />
+  }
+</main>

@@ -1,0 +1,30 @@
+@if (emContexto()) {
+  <nav class="navegacao-serie navegacao-serie--grade" aria-label="Questões da série">
+    <span class="titulo">Navegação</span>
+    <div class="grade">
+      @for (numero of numeros(); track numero) {
+        <button
+          type="button"
+          [class.ativa]="atual() === numero"
+          [class.respondida]="respondidas().has(numero)"
+          (click)="selecionar.emit(numero)"
+        >
+          {{ numero + 1 }}
+        </button>
+      }
+    </div>
+  </nav>
+} @else {
+  <nav class="navegacao-serie" aria-label="Questões da série">
+    @for (numero of numeros(); track numero) {
+      <button
+        type="button"
+        [class.ativa]="atual() === numero"
+        [class.respondida]="respondidas().has(numero)"
+        (click)="selecionar.emit(numero)"
+      >
+        {{ numero + 1 }}
+      </button>
+    }
+  </nav>
+}

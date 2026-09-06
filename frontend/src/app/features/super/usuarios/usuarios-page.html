@@ -1,0 +1,163 @@
+<div class="admin-page">
+  <header>
+    <span class="eyebrow">Administração</span>
+    <h1>Usuários</h1>
+    <p class="text-muted">Gerencie quem tem acesso à plataforma.</p>
+  </header>
+  <div class="toolbar">
+    <div class="filters">
+      <select
+        class="input"
+        aria-label="Perfil"
+        [ngModel]="store.filtroPerfil()"
+        (ngModelChange)="store.filtroPerfil.set($event)"
+      >
+        <option value="">Todos os perfis</option>
+        <option value="ESTUDANTE">Estudante</option>
+        <option value="PROFESSOR">Professor</option>
+        <option value="ADMIN">Administrador</option>
+        <option value="SUPER_ADMIN">Super admin</option>
+      </select>
+      <select
+        class="input"
+        aria-label="Status"
+        [ngModel]="store.filtroStatus()"
+        (ngModelChange)="store.filtroStatus.set($event)"
+      >
+        <option value="">Todos os status</option>
+        <option value="ATIVO">Ativo</option>
+        <option value="CONVITE_PENDENTE">Convite pendente</option>
+        <option value="INATIVO">Inativo</option>
+      </select>
+      <button class="btn btn-secondary" type="button" (click)="store.aplicarFiltros()">
+        Filtrar
+      </button>
+    </div>
+    <a class="btn btn-primary" routerLink="/super/usuarios/novo"
+      ><i class="ph ph-user-plus"></i> Novo usuário</a
+    >
+  </div>
+  @if (store.erroLista()) {
+    <p class="erro" role="alert">{{ store.erroLista() }}</p>
+  }
+  @if (!store.carregandoLista() && !store.pagina().content.length) {
+    <div class="empty card elev-sm">
+      <h3>Nenhum usuário encontrado</h3>
+      <p class="text-muted">Ajuste os filtros ou cadastre um novo usuário.</p>
+    </div>
+  } @else {
+    <div class="card elev-sm table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>Perfil</th>
+            <th>Status</th>
+            <th class="ordenavel" (click)="store.alternarOrdenacao()">
+              Criado em
+              <i
+                class="ph"
+                [class.ph-sort-ascending]="store.ordenacao() === 'criadoEm,asc'"
+                [class.ph-sort-descending]="store.ordenacao() === 'criadoEm,desc'"
+              ></i>
+            </th>
+            <th class="acoes">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (usuario of store.pagina().content; track usuario.id) {
+            <tr>
+              <td class="nome-usuario">
+                <span class="avatar">{{ iniciais(usuario.nome) }}</span>
+                <span>{{ usuario.nome }}</span>
+              </td>
+              <td class="text-muted">{{ usuario.email }}</td>
+              <td>
+                <span [class]="classePerfil(usuario.perfil)">{{
+                  rotuloPerfil(usuario.perfil)
+                }}</span>
+              </td>
+              <td>
+                <span [class]="classeStatus(usuario.status)">{{
+                  rotuloStatus(usuario.status)
+                }}</span>
+              </td>
+              <td class="text-muted">{{ usuario.criadoEm | date: 'dd/MM/yyyy' : 'UTC' }}</td>
+              <td class="acoes">
+                <a
+                  class="btn btn-icon btn-ghost"
+                  [routerLink]="['/super/usuarios', usuario.id, 'editar']"
+                  title="Editar"
+                  ><i class="ph ph-pencil-simple"></i
+                ></a>
+                @if (usuario.status === StatusUsuario.ATIVO) {
+                  <button
+                    class="btn btn-icon btn-ghost"
+                    type="button"
+                    title="Redefinir senha"
+                    (click)="store.redefinirSenha(usuario)"
+                  >
+                    <i class="ph ph-key"></i>
+                  </button>
+                }
+                @if (usuario.status === StatusUsuario.CONVITE_PENDENTE) {
+                  <button
+                    class="btn btn-icon btn-ghost"
+                    type="button"
+                    title="Reenviar convite"
+                    (click)="store.reenviarConvite(usuario)"
+                  >
+                    <i class="ph ph-paper-plane-tilt"></i>
+                  </button>
+                }
+                <button
+                  class="btn btn-icon btn-ghost danger"
+                  type="button"
+                  title="Excluir"
+                  (click)="confirmarExclusao(usuario)"
+                >
+                  <i class="ph ph-trash"></i>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <div class="pagination">
+        <span>{{ paginacaoLabel() }}</span>
+        <span>
+          <button
+            class="btn btn-secondary"
+            type="button"
+            [disabled]="store.pagina().page === 0"
+            (click)="store.irParaPagina(store.pagina().page - 1)"
+          >
+            Anterior
+          </button>
+          <button
+            class="btn btn-secondary"
+            type="button"
+            [disabled]="
+              (store.pagina().page + 1) * store.pagina().size >= store.pagina().totalElements
+            "
+            (click)="store.irParaPagina(store.pagina().page + 1)"
+          >
+            Próxima
+          </button>
+        </span>
+      </div>
+    </div>
+  }
+  @if (exclusao(); as usuario) {
+    <app-confirmacao-dialog
+      titulo="Excluir usuário"
+      [mensagem]="
+        'A exclusão de ' + usuario.nome + ' é irreversível e revoga o acesso imediatamente.'
+      "
+      confirmarLabel="Excluir"
+      (confirmado)="excluir()"
+      (cancelado)="exclusao.set(null)"
+    />
+  }
+</div>

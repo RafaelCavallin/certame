@@ -1,0 +1,139 @@
+<div class="admin-page">
+  <div class="toolbar">
+    <div class="filters">
+      <input
+        class="input busca"
+        aria-label="Buscar questões"
+        placeholder="Buscar por código ou enunciado"
+        [(ngModel)]="filtros.termo"
+        (keyup.enter)="aplicar()"
+      /><select class="input" aria-label="Disciplina" [(ngModel)]="filtros.disciplinaId">
+        <option value="">Todas as disciplinas</option>
+        @for (d of disciplinas(); track d.id) {
+          <option [value]="d.id">{{ d.nome }}</option>
+        }</select
+      ><select class="input" aria-label="Banca" [(ngModel)]="filtros.bancaId">
+        <option value="">Todas as bancas</option>
+        @for (b of bancas(); track b.id) {
+          <option [value]="b.id">{{ b.nome }}</option>
+        }</select
+      ><select class="input" aria-label="Status" [(ngModel)]="filtros.status">
+        <option value="">Todos os status</option>
+        <option value="RASCUNHO">Rascunho</option>
+        <option value="EM_REVISAO">Em revisão</option>
+        <option value="PUBLICADA">Publicada</option></select
+      ><button class="btn btn-secondary" type="button" (click)="aplicar()">Filtrar</button>
+    </div>
+    <a class="btn btn-primary" routerLink="/admin/questoes/nova"
+      ><i class="ph ph-plus"></i> Nova questão</a
+    >
+  </div>
+  @if (erro()) {
+    <p class="erro" role="alert">{{ erro() }}</p>
+  }
+  @if (!pagina().totalElements) {
+    <div class="empty card elev-sm">
+      <h3>Nenhuma questão encontrada</h3>
+      <p class="text-muted">Ajuste os filtros ou limpe a busca.</p>
+      <button class="btn btn-primary" (click)="filtros.limpar(); carregar()">Limpar filtros</button>
+    </div>
+  } @else {
+    <div class="card elev-sm table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Cód.</th>
+            <th>Enunciado</th>
+            <th>Disciplina</th>
+            <th>Banca / Ano</th>
+            <th>Tipo</th>
+            <th>Status</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (q of pagina().content; track q.id) {
+            <tr>
+              <td>{{ q.codigo }}</td>
+              <td class="resumo">{{ q.enunciadoResumo }}</td>
+              <td>{{ q.disciplina }}</td>
+              <td>{{ q.banca || '—' }}{{ q.ano ? ' / ' + q.ano : '' }}</td>
+              <td>
+                <span class="tag tag-neutral">{{ q.tipo }}</span>
+              </td>
+              <td>{{ statusLabel(q.status) }}</td>
+              <td class="acoes">
+                <a
+                  class="btn btn-icon btn-ghost"
+                  [routerLink]="['/admin/questoes', q.id]"
+                  title="Editar"
+                  ><i class="ph ph-pencil-simple"></i
+                ></a>
+                @if (auth.perfil() === 'ADMIN' || auth.perfil() === 'SUPER_ADMIN') {
+                  @if (q.status === 'PUBLICADA') {
+                    <button
+                      class="btn btn-icon btn-ghost"
+                      title="Despublicar"
+                      (click)="despublicar(q.id)"
+                    >
+                      <i class="ph ph-download-simple"></i>
+                    </button>
+                  } @else {
+                    <button
+                      class="btn btn-icon btn-ghost"
+                      title="Publicar"
+                      (click)="publicar(q.id)"
+                    >
+                      <i class="ph ph-upload-simple"></i>
+                    </button>
+                  }
+                }
+                <button
+                  class="btn btn-icon btn-ghost danger"
+                  title="Excluir"
+                  (click)="excluir(q.id)"
+                >
+                  <i class="ph ph-trash"></i>
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+      <div class="pagination">
+        <span>Mostrando {{ pagina().content.length }} de {{ pagina().totalElements }} questões</span
+        ><span
+          ><button
+            class="btn btn-secondary"
+            [disabled]="pagina().page === 0"
+            (click)="filtros.irPara(pagina().page - 1); carregar()"
+          >
+            Anterior</button
+          ><button
+            class="btn btn-secondary"
+            [disabled]="
+              !pagina().totalElements ||
+              (pagina().page + 1) * pagina().size >= pagina().totalElements
+            "
+            (click)="filtros.irPara(pagina().page + 1); carregar()"
+          >
+            Próxima
+          </button></span
+        >
+      </div>
+    </div>
+  }
+  @if (confirmacao(); as c) {
+    <app-confirmacao-dialog
+      [titulo]="c.acao === 'excluir' ? 'Excluir questão' : 'Despublicar questão'"
+      [mensagem]="
+        c.acao === 'excluir'
+          ? 'A questão será removida da lista administrativa.'
+          : 'A questão deixará de aparecer em novas sessões.'
+      "
+      [confirmarLabel]="c.acao === 'excluir' ? 'Excluir' : 'Despublicar'"
+      (confirmado)="confirmar()"
+      (cancelado)="confirmacao.set(null)"
+    />
+  }
+</div>

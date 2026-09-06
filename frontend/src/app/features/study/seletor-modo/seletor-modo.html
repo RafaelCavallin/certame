@@ -1,0 +1,12 @@
+<div class="seg" role="radiogroup" aria-label="Modo de estudo">
+  @for (item of ['FOCO', 'CONTEXTO', 'PROVA']; track item) {
+    <button
+      type="button"
+      [disabled]="item === 'PROVA' && !podeTrocar()"
+      [class.ativa]="modo() === item"
+      (click)="selecionar($any(item))"
+    >
+      {{ item === 'FOCO' ? 'Foco' : item === 'CONTEXTO' ? 'Contexto' : 'Iniciar prova' }}
+    </button>
+  }
+</div>

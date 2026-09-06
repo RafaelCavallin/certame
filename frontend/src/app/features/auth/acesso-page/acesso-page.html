@@ -1,0 +1,108 @@
+<div class="acesso">
+  <section class="apresentacao" aria-labelledby="apresentacao-titulo">
+    <div class="marca">
+      <span class="marca-icone"><i class="ph-fill ph-medal"></i></span><span>Certame</span>
+    </div>
+    <div class="apresentacao-conteudo">
+      <h1 id="apresentacao-titulo">Sua aprovação começa em cada questão.</h1>
+      <p>
+        Milhares de questões comentadas das principais bancas. Filtre, resolva, revise e acompanhe
+        sua evolução até o dia da prova.
+      </p>
+      <div class="metricas">
+        <div><strong>184k+</strong><span>questões</span></div>
+        <div><strong>62</strong><span>bancas</span></div>
+        <div><strong>340</strong><span>editais</span></div>
+      </div>
+    </div>
+    <small>© 2026 Certame · Estudo inteligente para concursos</small>
+  </section>
+  <main class="painel">
+    <div class="formulario-area">
+      @if (sucesso()) {
+        <p class="aviso-sucesso" role="status">Senha redefinida. Entre novamente para continuar.</p>
+      }
+      <div class="abas" role="tablist" aria-label="Acesso">
+        <button
+          type="button"
+          role="tab"
+          [attr.aria-selected]="!cadastro()"
+          [class.ativa]="!cadastro()"
+          (click)="alternar(false)"
+        >
+          Entrar
+        </button>
+        <button
+          type="button"
+          role="tab"
+          [attr.aria-selected]="cadastro()"
+          [class.ativa]="cadastro()"
+          (click)="alternar(true)"
+        >
+          Criar conta
+        </button>
+      </div>
+      <h2>{{ titulo() }}</h2>
+      <p class="subtitulo">{{ subtitulo() }}</p>
+      <form [formGroup]="formulario" (ngSubmit)="enviar()" novalidate>
+        @if (cadastro()) {
+          <div class="field">
+            <label for="nome">Nome completo</label
+            ><input
+              id="nome"
+              class="input"
+              formControlName="nome"
+              placeholder="Maria Oliveira"
+              autocomplete="name"
+              [attr.aria-invalid]="!!mensagem(formulario.controls.nome)"
+            />
+            @if (mensagem(formulario.controls.nome); as mensagem) {
+              <span class="erro-campo">{{ mensagem }}</span>
+            }
+          </div>
+        }
+        <div class="field">
+          <label for="email">E-mail</label
+          ><input
+            id="email"
+            class="input"
+            type="email"
+            formControlName="email"
+            placeholder="voce@email.com"
+            autocomplete="email"
+            [attr.aria-invalid]="!!mensagem(formulario.controls.email)"
+          />
+          @if (mensagem(formulario.controls.email); as mensagem) {
+            <span class="erro-campo">{{ mensagem }}</span>
+          }
+        </div>
+        <div class="field">
+          <label for="senha">Senha</label
+          ><input
+            #senha
+            id="senha"
+            class="input"
+            type="password"
+            formControlName="senha"
+            autocomplete="current-password"
+            [attr.aria-invalid]="!!mensagem(formulario.controls.senha)"
+          />
+          @if (mensagem(formulario.controls.senha); as mensagem) {
+            <span class="erro-campo">{{ mensagem }}</span>
+          }
+        </div>
+        @if (erro(); as mensagem) {
+          <div class="erro-api" role="alert">
+            <i class="ph ph-warning-circle"></i><span>{{ mensagem }}</span>
+          </div>
+        }
+        @if (!cadastro()) {
+          <div class="esqueci"><a routerLink="/esqueci-senha">Esqueci minha senha</a></div>
+        }
+        <button class="btn btn-primary btn-block" type="submit" [disabled]="auth.carregando()">
+          {{ chamada() }} <i class="ph ph-arrow-right"></i>
+        </button>
+      </form>
+    </div>
+  </main>
+</div>

@@ -1,0 +1,9 @@
+form {
+  display: grid;
+  gap: var(--space-3);
+}
+.erro {
+  min-height: 18px;
+  color: var(--color-danger-300);
+  font-size: 12px;
+}

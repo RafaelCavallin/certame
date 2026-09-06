@@ -1,0 +1,25 @@
+# Snapshots de memória do Node (lixo de profiling, ~170 MB — acima do limite do GitHub)
+*.heapsnapshot
+
+# Build
+target/
+node_modules/
+dist/
+out-tsc/
+
+# Cache do Angular
+.angular/
+
+# Saídas de teste
+test-results/
+playwright-report/
+coverage/
+*.log
+
+# Estado local de ferramentas
+.claude/scheduled_tasks.lock
+.claude/settings.local.json
+
+# Sistema operacional
+.DS_Store
+Thumbs.db

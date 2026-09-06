@@ -1,0 +1,135 @@
+<div class="card elev-sm" style="gap: 12px">
+  <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px">
+    <div style="min-width: 0">
+      <div class="card-title" style="margin: 0">{{ deck().nome }}</div>
+      <div style="font-size: 12.5px; color: var(--color-neutral-400); margin-top: 3px">
+        {{ deck().descricao }}
+      </div>
+    </div>
+    <div style="display: flex; gap: 4px; flex: none">
+      @if (deck().editavel) {
+        <button
+          class="btn btn-icon btn-secondary"
+          type="button"
+          title="Configurar deck"
+          [attr.aria-label]="'Configurar deck ' + deck().nome"
+          (click)="editar.emit(deck())"
+          style="border-color: transparent; width: 30px; height: 30px"
+        >
+          <i class="ph ph-sliders-horizontal"></i>
+        </button>
+        <button
+          class="btn btn-icon btn-secondary"
+          type="button"
+          title="Excluir deck"
+          [attr.aria-label]="'Excluir deck ' + deck().nome"
+          (click)="excluir.emit(deck())"
+          style="
+            border-color: transparent;
+            width: 30px;
+            height: 30px;
+            color: var(--color-danger-300);
+          "
+        >
+          <i class="ph ph-trash"></i>
+        </button>
+      } @else {
+        <span class="tag tag-neutral" style="font-size: 10px; align-self: center">Padrão</span>
+      }
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px">
+    <div
+      style="
+        border: 1px solid var(--color-divider);
+        border-radius: var(--radius-md);
+        padding: 9px 11px;
+      "
+    >
+      <div style="font-size: 11px; color: var(--color-neutral-500)">Cards</div>
+      <div style="font-family: var(--font-heading); font-size: 19px">{{ deck().totalCards }}</div>
+    </div>
+    <div
+      style="
+        border: 1px solid var(--color-divider);
+        border-radius: var(--radius-md);
+        padding: 9px 11px;
+      "
+    >
+      <div style="font-size: 11px; color: var(--color-neutral-500)">Vencendo hoje</div>
+      <div style="font-family: var(--font-heading); font-size: 19px" [style.color]="corVencendo()">
+        {{ deck().vencendoHoje }}
+      </div>
+    </div>
+    <div
+      style="
+        border: 1px solid var(--color-divider);
+        border-radius: var(--radius-md);
+        padding: 9px 11px;
+      "
+    >
+      <div style="font-size: 11px; color: var(--color-neutral-500)">Novos</div>
+      <div style="font-family: var(--font-heading); font-size: 19px">{{ deck().novos }}</div>
+    </div>
+  </div>
+
+  <div
+    style="
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      font-size: 12px;
+      color: var(--color-neutral-400);
+    "
+  >
+    <div style="display: flex; align-items: center; gap: 7px">
+      <i class="ph ph-gauge" style="color: var(--color-accent)"></i>{{ deck().limitesRotulo }}
+    </div>
+    <div style="display: flex; align-items: center; gap: 7px">
+      <i class="ph ph-brain" style="color: var(--color-accent)"></i>{{ deck().retencaoRotulo }}
+    </div>
+  </div>
+
+  @if (deck().aviso; as aviso) {
+    <div
+      style="
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 10px 12px;
+        border-radius: var(--radius-md);
+        background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+        border: 1px solid color-mix(in srgb, var(--color-accent) 22%, transparent);
+        color: var(--color-neutral-200);
+        font-size: 12.5px;
+        line-height: 1.5;
+      "
+    >
+      <i
+        class="ph ph-warning-circle"
+        style="font-size: 16px; color: var(--color-accent-300); margin-top: 1px; flex: none"
+      ></i>
+      <span style="flex: 1">{{ aviso.mensagem }}</span>
+    </div>
+    @if (deck().editavel) {
+      <button
+        class="btn btn-ghost"
+        type="button"
+        (click)="editar.emit(deck())"
+        style="align-self: flex-start; padding: 0; font-size: 12.5px"
+      >
+        <i class="ph ph-sliders-horizontal"></i> Ajustar limites
+      </button>
+    }
+  }
+
+  <button
+    class="btn btn-secondary"
+    type="button"
+    (click)="estudar.emit(deck())"
+    style="border-color: var(--color-accent); color: var(--color-accent)"
+  >
+    <i class="ph ph-lightning"></i> Estudar este deck
+  </button>
+</div>

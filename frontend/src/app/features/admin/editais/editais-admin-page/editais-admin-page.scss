@@ -1,0 +1,50 @@
+.admin-page {
+  padding: var(--space-8);
+  max-width: 1240px;
+}
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+.table-wrap {
+  padding: var(--space-3) var(--space-4);
+  overflow-x: auto;
+}
+.nome {
+  max-width: 280px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.acoes {
+  text-align: right;
+  white-space: nowrap;
+}
+.danger,
+.erro {
+  color: var(--color-danger-300);
+}
+.empty {
+  text-align: center;
+  padding: var(--space-8);
+}
+.tag-encerrado {
+  background: var(--color-neutral-900);
+  color: var(--color-neutral-400);
+}
+.aviso-prazo {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-danger-300);
+  font-size: 11px;
+  margin-top: 3px;
+}
+@media (max-width: 700px) {
+  .admin-page {
+    padding: var(--space-4);
+  }
+}

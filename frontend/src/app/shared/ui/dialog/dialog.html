@@ -1,0 +1,13 @@
+@for (instancia of servico.abertos(); track instancia.id) {
+  <div class="dialog-backdrop" role="presentation">
+    <section
+      class="dialog"
+      role="dialog"
+      aria-modal="true"
+      tabindex="-1"
+      [appDialogPainel]="instancia"
+    >
+      <ng-container *ngComponentOutlet="instancia.componente; injector: instancia.injetor" />
+    </section>
+  </div>
+}

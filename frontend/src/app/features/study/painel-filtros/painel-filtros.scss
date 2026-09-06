@@ -1,0 +1,81 @@
+.filtros {
+  width: 250px;
+  flex: none;
+  border-right: 1px solid var(--color-divider);
+  overflow-y: auto;
+  padding: var(--space-8) var(--space-6);
+}
+.titulo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+}
+.field {
+  margin-bottom: var(--space-6);
+}
+.opcao {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+  cursor: pointer;
+}
+.opcao input {
+  width: auto;
+  height: auto;
+}
+
+/* — variante "preparo": tela de montagem da sessão, antes da primeira questão — */
+.filtros.preparo {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  border-right: 0;
+  overflow: visible;
+}
+.cabecalho-preparo {
+  margin-bottom: var(--space-8);
+}
+.cabecalho-preparo .eyebrow {
+  color: var(--color-neutral-500);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.cabecalho-preparo h1 {
+  margin: var(--space-2) 0 var(--space-3);
+  font-size: 26px;
+}
+.cabecalho-preparo p {
+  margin: 0;
+  color: var(--color-neutral-400);
+  font-size: 13.5px;
+}
+.preparo .campos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 var(--space-6);
+}
+.preparo .opcao {
+  grid-column: 1 / -1;
+}
+.preparo .modo {
+  margin-top: var(--space-4);
+}
+.rotulo-modo {
+  display: block;
+  margin-bottom: var(--space-3);
+}
+.ajuda {
+  margin: var(--space-3) 0 0;
+  color: var(--color-neutral-400);
+  font-size: 12.5px;
+}
+@media (max-width: 720px) {
+  .preparo .campos {
+    grid-template-columns: 1fr;
+  }
+}

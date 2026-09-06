@@ -1,0 +1,42 @@
+<section class="correcao">
+  <p class="eyebrow">Resultado da prova</p>
+  <h1>{{ correcao().pctAcerto }}% de acerto</h1>
+  <div class="resumo">
+    <span
+      ><b>{{ correcao().acertos }}</b> acertos</span
+    ><span
+      ><b>{{ correcao().erros }}</b> erros</span
+    ><span
+      ><b>{{ correcao().naoRespondidas }}</b> não respondidas</span
+    ><span
+      ><b>{{ correcao().tempoTotalSegundos }}s</b> tempo total</span
+    >
+  </div>
+  <div class="itens">
+    @for (item of correcao().itens; track item.questaoId) {
+      <article
+        [class.acerto]="item.correta === true"
+        [class.erro]="item.correta === false"
+        [class.em-branco]="item.correta === null"
+      >
+        <div class="cabecalho-item">
+          <strong>{{ item.ordem }}. {{ item.codigo }} · {{ item.disciplina }}</strong>
+          <span class="status">
+            {{ item.correta === true ? 'Acertou' : item.correta === false ? 'Errou' : 'Em branco' }}
+          </span>
+        </div>
+        <p>{{ item.enunciadoResumo }}</p>
+        <small
+          >Marcada: {{ item.marcada ?? 'Não respondida' }} · Gabarito: {{ item.gabarito }}</small
+        >
+        @if (item.comentario) {
+          <p class="comentario">{{ item.comentario }}</p>
+        }
+      </article>
+    }
+  </div>
+  <div class="acoes">
+    <button class="btn btn-primary" (click)="refazer.emit()">Refazer</button
+    ><button class="btn btn-secondary" (click)="inicio.emit()">Voltar ao início</button>
+  </div>
+</section>

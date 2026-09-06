@@ -1,0 +1,23 @@
+<aside class="painel-gabarito" aria-live="polite" [class.correta]="resposta().correta">
+  <div class="veredito">
+    <i
+      class="ph-fill"
+      [class.ph-check-circle]="resposta().correta"
+      [class.ph-x-circle]="!resposta().correta"
+      aria-hidden="true"
+    ></i>
+    <strong>{{ resposta().correta ? 'Resposta correta' : 'Resposta incorreta' }}</strong>
+    <span class="gabarito">Gabarito: {{ resposta().gabarito }}</span>
+  </div>
+  @if (resposta().estatistica) {
+    <p class="estatistica">
+      Taxa de acerto: {{ resposta().estatistica?.pctAcerto }}% · Tempo médio:
+      {{ resposta().estatistica?.tempoMedioSegundos }}s
+    </p>
+  } @else {
+    <p class="estatistica">Sem estatística suficiente.</p>
+  }
+  @if (resposta().comentario) {
+    <p class="comentario">{{ resposta().comentario }}</p>
+  }
+</aside>

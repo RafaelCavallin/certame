@@ -1,0 +1,10 @@
+<section class="estado-vazio" aria-live="polite">
+  <i class="ph ph-notebook" aria-hidden="true"></i>
+  <h2>{{ titulo() }}</h2>
+  <p class="text-muted">{{ orientacao() }}</p>
+  @if (acaoLabel()) {
+    <button class="btn btn-primary" type="button" (click)="acao.emit()">
+      <i class="ph ph-plus"></i>{{ acaoLabel() }}
+    </button>
+  }
+</section>

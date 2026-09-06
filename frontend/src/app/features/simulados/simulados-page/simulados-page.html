@@ -1,0 +1,57 @@
+<main class="simulados-page">
+  <header>
+    <div>
+      <p class="eyebrow">Estudo</p>
+      <h1>Simulados</h1>
+      <p class="text-muted">Faça provas completas, acompanhe sua nota e revise seus erros.</p>
+    </div>
+  </header>
+  @if (erro()) {
+    <p class="erro" role="alert">{{ erro() }}</p>
+  }
+  @if (dados().proximo; as proximo) {
+    <app-proximo-simulado-card [simulado]="proximo" />
+  }
+  <section class="grupo">
+    <h2>Simulados disponíveis</h2>
+    @if (dados().disponiveis.length) {
+      @for (simulado of dados().disponiveis; track simulado.id) {
+        <app-simulado-card [simulado]="simulado" (iniciar)="iniciar(simulado)" />
+      }
+    } @else {
+      <p class="vazio">Nenhum simulado disponível no momento.</p>
+    }
+  </section>
+  <section class="grupo">
+    <h2>Próximos simulados</h2>
+    @if (dados().agendados.length) {
+      @for (simulado of dados().agendados; track simulado.id) {
+        <app-simulado-card [simulado]="simulado" />
+      }
+    } @else {
+      <p class="vazio">Você não tem simulados agendados.</p>
+    }
+  </section>
+  <section class="grupo">
+    <h2>Concluídos</h2>
+    @if (dados().concluidos.length) {
+      @for (simulado of dados().concluidos; track simulado.tentativaId) {
+        <app-simulado-card [simulado]="simulado" (revisar)="revisar(simulado)" />
+      }
+    } @else {
+      <div class="vazio">
+        <i class="ph ph-check-circle" aria-hidden="true"></i>
+        <p>Você ainda não concluiu nenhum simulado.</p>
+      </div>
+    }
+  </section>
+  @if (confirmacaoTreino()) {
+    <app-confirmacao-dialog
+      titulo="Iniciar como treino"
+      mensagem="Este simulado já foi concluído. A nova tentativa será apenas um treino e não alterará sua nota registrada. Deseja continuar?"
+      confirmarLabel="Continuar"
+      (confirmado)="confirmarTreino()"
+      (cancelado)="cancelarTreino()"
+    />
+  }
+</main>

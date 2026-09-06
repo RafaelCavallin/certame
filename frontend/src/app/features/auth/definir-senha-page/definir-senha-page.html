@@ -1,0 +1,62 @@
+<main class="pagina-publica">
+  <div class="formulario-area">
+    @switch (estado()) {
+      @case ('formulario') {
+        <span class="icone"><i class="ph ph-lock-key"></i></span>
+        <h1>Criar nova senha</h1>
+        <p class="subtitulo">
+          Defina a nova senha da sua conta. Este link vale por 1 hora e só pode ser usado uma vez.
+        </p>
+        <form [formGroup]="formulario" (ngSubmit)="enviar()" novalidate>
+          <div class="field">
+            <label for="senha">Nova senha</label
+            ><input
+              id="senha"
+              class="input"
+              type="password"
+              formControlName="senha"
+              autocomplete="new-password"
+              [attr.aria-invalid]="
+                formulario.controls.senha.invalid && formulario.controls.senha.touched
+              "
+            />
+            <span class="ajuda">Ao menos 8 caracteres.</span>
+            @if (formulario.controls.senha.touched && formulario.controls.senha.invalid) {
+              <span class="erro-campo">A senha deve ter ao menos 8 caracteres.</span>
+            }
+          </div>
+          @if (erro(); as mensagem) {
+            <div class="erro-api" role="alert">
+              <i class="ph ph-warning-circle"></i>{{ mensagem }}
+            </div>
+          }
+          <button class="btn btn-primary btn-block" type="submit">
+            Salvar nova senha <i class="ph ph-check"></i>
+          </button>
+        </form>
+      }
+      @case ('concluido') {
+        <span class="icone"><i class="ph ph-check-circle"></i></span>
+        <h1>Senha redefinida</h1>
+        <p class="subtitulo">
+          Sua senha foi alterada e as sessões abertas em outros dispositivos foram encerradas. Entre
+          novamente para continuar.
+        </p>
+        <a routerLink="/login" [queryParams]="{ sucesso: true }" class="btn btn-primary btn-block"
+          >Ir para o login <i class="ph ph-arrow-right"></i
+        ></a>
+      }
+      @case ('invalido') {
+        <span class="icone invalido"><i class="ph ph-warning-circle"></i></span>
+        <h1>Link inválido</h1>
+        <p class="subtitulo">
+          Este link expirou ou já foi utilizado. Solicite um novo para redefinir sua senha.
+        </p>
+        <button class="btn btn-primary btn-block" type="button" (click)="irParaEsqueci()">
+          Solicitar novo link <i class="ph ph-paper-plane-tilt"></i>
+        </button>
+        <div class="centralizado"><a routerLink="/login">Voltar para o login</a></div>
+      }
+    }
+  </div>
+</main>

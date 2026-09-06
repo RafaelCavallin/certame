@@ -1,0 +1,38 @@
+<div class="seletor">
+  <div class="selecionadas">
+    @for (id of selecionados(); track id) {
+      <span class="tag tag-neutral"
+        >{{ nomeDe(id)
+        }}<button type="button" (click)="remover(id)" [attr.aria-label]="'Remover ' + nomeDe(id)">
+          <i class="ph ph-x"></i></button
+      ></span>
+    }
+    @if (!selecionados().length) {
+      <p class="text-muted">Nenhuma disciplina selecionada.</p>
+    }
+  </div>
+  <input
+    class="input"
+    type="text"
+    placeholder="Filtrar disciplinas"
+    [ngModel]="filtro()"
+    (ngModelChange)="filtro.set($event)"
+    [ngModelOptions]="{ standalone: true }"
+    aria-label="Filtrar disciplinas"
+  />
+  <div class="card lista">
+    @for (d of filtradas(); track d.id) {
+      <label class="item">
+        <input
+          type="checkbox"
+          [checked]="selecionados().includes(d.id)"
+          (change)="alternar(d.id)"
+        />
+        <span>{{ d.nome }}</span>
+      </label>
+    }
+    @if (!filtradas().length) {
+      <p class="text-muted">Nenhuma disciplina encontrada.</p>
+    }
+  </div>
+</div>

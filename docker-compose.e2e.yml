@@ -1,0 +1,17 @@
+# Sobreposição de E2E: portas isoladas e volume descartável, para a suíte nunca disputar
+# as portas nem os dados do ambiente de desenvolvimento. `!override` substitui a lista da
+# base — sem ele o compose concatena e o contêiner de teste também publicaria 55432/55525.
+services:
+  postgres:
+    ports: !override
+      - "30532:5432"
+    volumes: !override
+      - certame-e2e-postgres-data:/var/lib/postgresql
+
+  mailhog:
+    ports: !override
+      - "30525:1025"
+      - "30580:8025"
+
+volumes:
+  certame-e2e-postgres-data:

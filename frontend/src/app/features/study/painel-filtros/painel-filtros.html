@@ -1,0 +1,135 @@
+<aside class="filtros" [class.preparo]="preparo()">
+  @if (preparo()) {
+    <header class="cabecalho-preparo">
+      <span class="eyebrow">Resolver questões</span>
+      <h1>Monte sua sessão</h1>
+      <p>Escolha os filtros, quantas questões quer responder e como quer respondê-las.</p>
+    </header>
+  } @else {
+    <div class="titulo"><i class="ph ph-funnel"></i><span>Filtros</span></div>
+  }
+  <form (submit)="$event.preventDefault(); aplicarFiltros()">
+    <div class="campos">
+      <div class="field">
+        <label for="disciplina">Disciplina</label>
+        <select
+          id="disciplina"
+          class="input"
+          [value]="disciplinaId() ?? ''"
+          (change)="selecionarDisciplina($any($event.target).value)"
+        >
+          <option value="">Todas</option>
+          @for (disciplina of disciplinas(); track disciplina.id) {
+            <option [value]="disciplina.id">{{ disciplina.nome }}</option>
+          }
+        </select>
+      </div>
+      <div class="field">
+        <label for="assunto">Assunto</label>
+        <select
+          id="assunto"
+          class="input"
+          [value]="assuntoId() ?? ''"
+          (change)="assuntoId.set($any($event.target).value || null)"
+        >
+          <option value="">Todos</option>
+          @for (assunto of assuntos(); track assunto.id) {
+            <option [value]="assunto.id">{{ assunto.nome }}</option>
+          }
+        </select>
+      </div>
+      <div class="field">
+        <label for="banca">Banca</label>
+        <select
+          id="banca"
+          class="input"
+          [value]="bancaId() ?? ''"
+          (change)="bancaId.set($any($event.target).value || null)"
+        >
+          <option value="">Todas</option>
+          @for (banca of bancas(); track banca.id) {
+            <option [value]="banca.id">{{ banca.nome }}</option>
+          }
+        </select>
+      </div>
+      <div class="field">
+        <label for="ano">Ano</label>
+        <input
+          id="ano"
+          class="input"
+          type="number"
+          [value]="ano() ?? ''"
+          (change)="ano.set($any($event.target).value ? +$any($event.target).value : null)"
+        />
+      </div>
+      <div class="field">
+        <label for="dificuldade">Dificuldade</label>
+        <select
+          id="dificuldade"
+          class="input"
+          [value]="dificuldade() ?? ''"
+          (change)="dificuldade.set($any($event.target).value || null)"
+        >
+          <option value="">Qualquer</option>
+          <option value="FACIL">Fácil</option>
+          <option value="MEDIA">Média</option>
+          <option value="DIFICIL">Difícil</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="tamanho">Quantidade de questões</label>
+        <select
+          id="tamanho"
+          class="input"
+          [value]="tamanho()"
+          (change)="tamanho.set(+$any($event.target).value)"
+        >
+          <option value="10">10 questões</option>
+          <option value="30">30 questões</option>
+          <option value="50">50 questões</option>
+        </select>
+      </div>
+      <label class="opcao">
+        <input
+          type="checkbox"
+          [checked]="somenteIneditas()"
+          (change)="somenteIneditas.set($any($event.target).checked)"
+        />
+        <span>Somente inéditas</span>
+      </label>
+      <label class="opcao">
+        <input
+          type="checkbox"
+          [checked]="excluirAcertadas()"
+          (change)="excluirAcertadas.set($any($event.target).checked)"
+        />
+        <span>Excluir que já acertei</span>
+      </label>
+    </div>
+
+    @if (preparo()) {
+      <div class="field modo">
+        <span class="rotulo-modo" id="rotulo-modo">Como responder</span>
+        <div class="seg" role="radiogroup" aria-labelledby="rotulo-modo">
+          @for (opcao of opcoesModo; track opcao.valor) {
+            <label class="seg-opt">
+              <input
+                type="radio"
+                name="modo-sessao"
+                [value]="opcao.valor"
+                [checked]="modo() === opcao.valor"
+                (change)="modo.set(opcao.valor)"
+              />
+              <span>{{ opcao.rotulo }}</span>
+            </label>
+          }
+        </div>
+        <p class="ajuda">{{ descricaoModo() }}</p>
+      </div>
+    }
+
+    <button class="btn btn-primary btn-block" type="submit">
+      {{ preparo() ? 'Iniciar sessão' : 'Aplicar filtros' }}
+    </button>
+  </form>
+</aside>

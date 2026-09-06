@@ -1,0 +1,53 @@
+<main class="pagina-publica">
+  <div class="formulario-area">
+    @if (!enviado()) {
+      <a routerLink="/login" class="btn btn-ghost voltar"
+        ><i class="ph ph-arrow-left"></i> Voltar para o login</a
+      >
+      <h1>Redefinir senha</h1>
+      <p class="subtitulo">
+        Informe seu e-mail cadastrado e enviaremos um link para você criar uma nova senha.
+      </p>
+      <form [formGroup]="formulario" (ngSubmit)="enviar()" novalidate>
+        <div class="field">
+          <label for="email">E-mail</label
+          ><input
+            id="email"
+            class="input"
+            type="email"
+            formControlName="email"
+            placeholder="voce@email.com"
+            autocomplete="email"
+            [attr.aria-invalid]="
+              formulario.controls.email.invalid && formulario.controls.email.touched
+            "
+          />
+          @if (
+            formulario.controls.email.touched && formulario.controls.email.hasError('required')
+          ) {
+            <span class="erro-campo">Informe seu e-mail.</span>
+          }
+          @if (formulario.controls.email.touched && formulario.controls.email.hasError('email')) {
+            <span class="erro-campo">Informe um e-mail válido.</span>
+          }
+        </div>
+        @if (erro(); as mensagem) {
+          <div class="erro-api" role="alert">
+            <i class="ph ph-warning-circle"></i>{{ mensagem }}
+          </div>
+        }
+        <button class="btn btn-primary btn-block" type="submit">
+          Enviar link de redefinição <i class="ph ph-paper-plane-tilt"></i>
+        </button>
+      </form>
+    } @else {
+      <span class="icone"><i class="ph ph-envelope-simple-open"></i></span>
+      <h1>Verifique seu e-mail</h1>
+      <p class="subtitulo">
+        Se houver uma conta associada a <strong>{{ formulario.controls.email.value }}</strong
+        >, enviamos um link com validade de 1 hora para você definir uma nova senha.
+      </p>
+      <a routerLink="/login" class="btn btn-secondary btn-block">Voltar para o login</a>
+    }
+  </div>
+</main>

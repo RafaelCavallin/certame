@@ -1,0 +1,2 @@
+E2E-03 PASSOU 2026-09-05
+estudante revisa e refaz como treino: Revisar -> revisao, Voltar para simulados, Refazer treino (dialog aceito), nota do historico permanece 100%

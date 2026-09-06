@@ -1,0 +1,125 @@
+<article class="questao" aria-labelledby="enunciado">
+  <div class="codigo">Questão {{ questao().ordem }} · {{ questao().codigo }}</div>
+  @if (emContexto()) {
+    <div class="metadados" aria-label="Metadados da questão">
+      @if (questao().disciplina) {
+        <span class="tag tag-accent">{{ questao().disciplina }}</span>
+      }
+      @if (questao().banca) {
+        <span class="tag tag-neutral">{{ questao().banca }}</span>
+      }
+      @if (questao().ano) {
+        <span class="tag tag-neutral">{{ questao().ano }}</span>
+      }
+      @if (questao().orgao) {
+        <span class="tag tag-neutral">{{ questao().orgao }}</span>
+      }
+      @if (questao().dificuldade) {
+        <span class="tag tag-outline">{{ questao().dificuldade }}</span>
+      }
+    </div>
+  }
+  <h1 id="enunciado" tabindex="-1">{{ questao().enunciado }}</h1>
+  @if (questao().tipo === 'CE') {
+    <div
+      class="alternativas"
+      role="radiogroup"
+      aria-label="Alternativas"
+      [class.bloqueada]="bloqueada()"
+    >
+      <button
+        type="button"
+        role="radio"
+        [disabled]="bloqueada()"
+        [attr.aria-checked]="marcada() === 'CERTO'"
+        [class.selecionada]="marcada() === 'CERTO'"
+        (click)="alternativa('CERTO')"
+      >
+        <b>C</b><span>Certo</span></button
+      ><button
+        type="button"
+        role="radio"
+        [disabled]="bloqueada()"
+        [attr.aria-checked]="marcada() === 'ERRADO'"
+        [class.selecionada]="marcada() === 'ERRADO'"
+        (click)="alternativa('ERRADO')"
+      >
+        <b>E</b><span>Errado</span>
+      </button>
+    </div>
+  } @else {
+    <div
+      class="alternativas"
+      role="radiogroup"
+      aria-label="Alternativas"
+      [class.bloqueada]="bloqueada()"
+    >
+      @for (item of questao().alternativas; track item.letra) {
+        <button
+          type="button"
+          role="radio"
+          [disabled]="bloqueada()"
+          [attr.aria-checked]="marcada() === item.letra"
+          [class.selecionada]="marcada() === item.letra"
+          (click)="alternativa(item.letra)"
+        >
+          <b>{{ item.letra }}</b
+          ><span>{{ item.texto }}</span>
+        </button>
+      }
+    </div>
+  }
+  @if (bloqueada()) {
+    <p class="aviso-bloqueio">
+      Resposta registrada — as alternativas ficam travadas nesta questão.
+    </p>
+  }
+  <div class="marcacoes" aria-label="Marcações">
+    <button
+      class="btn btn-secondary btn-marcacao"
+      type="button"
+      [class.ativa]="questao().favorita"
+      [attr.aria-pressed]="questao().favorita"
+      (click)="marcar.emit('favorita')"
+    >
+      <i
+        class="ph-star"
+        [class.ph]="!questao().favorita"
+        [class.ph-fill]="questao().favorita"
+        aria-hidden="true"
+      ></i>
+      {{ questao().favorita ? 'Desfavoritar' : 'Favoritar' }}</button
+    ><button
+      class="btn btn-secondary btn-marcacao"
+      type="button"
+      [class.ativa]="questao().erroRecorrente"
+      [attr.aria-pressed]="questao().erroRecorrente"
+      (click)="marcar.emit('erroRecorrente')"
+    >
+      <i
+        class="ph-warning"
+        [class.ph]="!questao().erroRecorrente"
+        [class.ph-fill]="questao().erroRecorrente"
+        aria-hidden="true"
+      ></i>
+      {{ questao().erroRecorrente ? 'Remover erro recorrente' : 'Marcar erro recorrente' }}</button
+    ><button
+      class="btn btn-secondary btn-adicionar-caderno"
+      type="button"
+      title="Adicionar questão a um caderno"
+      (click)="adicionarCaderno.emit()"
+    >
+      <i class="ph ph-notebook" aria-hidden="true"></i> Adicionar ao caderno</button
+    ><button
+      class="btn btn-secondary btn-novo-flashcard"
+      type="button"
+      title="Criar flashcard desta questão"
+      (click)="novoFlashcard.emit()"
+    >
+      <i class="ph ph-lightning" aria-hidden="true"></i> Novo flashcard
+      @if (criadosNaSessao(); as contador) {
+        <span class="tag tag-neutral">{{ contador }}</span>
+      }
+    </button>
+  </div>
+</article>

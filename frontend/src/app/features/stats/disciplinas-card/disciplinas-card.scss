@@ -1,0 +1,36 @@
+.disciplinas {
+  gap: var(--space-4);
+}
+.disciplinas h2 {
+  margin: 0;
+  font-size: 16px;
+}
+.disciplina {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+.linha {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+}
+.linha span:last-child {
+  color: var(--color-neutral-400);
+}
+.volume {
+  color: var(--color-neutral-500);
+  font-size: 11px;
+}
+.trilho {
+  height: 7px;
+  border-radius: var(--radius-sm);
+  background: var(--color-neutral-900);
+  overflow: hidden;
+}
+.trilho span {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-sm);
+  background: var(--color-accent);
+}

@@ -1,0 +1,51 @@
+<div class="dialog-backdrop" (click)="fechado.emit()">
+  <section class="dialog adicionar" role="dialog" aria-modal="true" (click)="$event.stopPropagation()">
+    <header>
+      <h2 class="dialog-title"><i class="ph ph-notebook"></i> Adicionar ao caderno</h2>
+      <button
+        class="btn btn-icon btn-secondary"
+        type="button"
+        aria-label="Fechar"
+        (click)="fechado.emit()"
+      >
+        <i class="ph ph-x"></i>
+      </button>
+    </header>
+    @if (erro()) {
+      <p class="erro" role="alert">{{ erro() }}</p>
+    }
+    @if (carregando()) {
+      <p class="text-muted">Carregando seus cadernos...</p>
+    } @else if (!cadernos().length) {
+      <p class="text-muted">
+        Você ainda não tem cadernos. Crie um na tela de Cadernos para poder adicionar questões.
+      </p>
+    } @else {
+      <ul class="lista">
+        @for (caderno of cadernos(); track caderno.id) {
+          <li>
+            <label>
+              <input
+                type="checkbox"
+                [checked]="selecionados().includes(caderno.id)"
+                (change)="alternar(caderno.id)"
+              />
+              {{ caderno.nome }}
+            </label>
+          </li>
+        }
+      </ul>
+    }
+    <div class="dialog-actions">
+      <button class="btn btn-secondary" type="button" (click)="fechado.emit()">Cancelar</button
+      ><button
+        class="btn btn-primary"
+        type="button"
+        [disabled]="!selecionados().length || salvando()"
+        (click)="adicionar()"
+      >
+        <i class="ph ph-plus"></i> Adicionar
+      </button>
+    </div>
+  </section>
+</div>

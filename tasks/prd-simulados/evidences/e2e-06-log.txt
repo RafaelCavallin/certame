@@ -1,0 +1,2 @@
+E2E-06 PASSOU 2026-09-05
+Axe wcag2a+wcag2aa sem violacoes em /simulados e /admin/simulados/nova; Tab move foco visivel; logout via titulo Sair

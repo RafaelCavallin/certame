@@ -1,0 +1,52 @@
+.simulados-page {
+  max-width: 1160px;
+  padding: var(--space-8) 28px;
+}
+.simulados-page header {
+  margin-bottom: var(--space-6);
+}
+.simulados-page h1 {
+  margin-bottom: var(--space-2);
+}
+.eyebrow {
+  color: var(--color-accent-300);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.grupo {
+  display: grid;
+  gap: var(--space-3);
+  margin-bottom: var(--space-8);
+}
+.grupo h2 {
+  margin: 0;
+  font-size: 17px;
+}
+.vazio {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-6);
+  border: 1px dashed var(--color-divider);
+  border-radius: var(--radius-lg);
+  color: var(--color-neutral-400);
+}
+.vazio i {
+  font-size: 20px;
+  color: var(--color-neutral-500);
+}
+.vazio p {
+  margin: 0;
+}
+.erro {
+  padding: var(--space-3);
+  color: var(--color-danger-300);
+  background: var(--color-danger-tint);
+  border-radius: var(--radius-md);
+}
+@media (max-width: 600px) {
+  .simulados-page {
+    padding: var(--space-4);
+  }
+}

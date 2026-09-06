@@ -1,0 +1,121 @@
+.questao {
+  max-width: 760px;
+  margin: 0 auto;
+}
+.codigo {
+  color: var(--color-neutral-500);
+  font-size: 12px;
+  margin-bottom: var(--space-6);
+}
+.metadados {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+.questao h1 {
+  font-size: 25px;
+  line-height: 1.35;
+  margin-bottom: var(--space-8);
+}
+.alternativas {
+  display: grid;
+  gap: var(--space-3);
+}
+.alternativas button {
+  position: relative;
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  padding: var(--space-4) var(--space-6);
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  font: inherit;
+  line-height: 1.5;
+  transition:
+    border-color 120ms ease,
+    background-color 120ms ease,
+    transform 120ms ease;
+}
+/* A letra vira um selo: âncora fixa à esquerda, para que os textos
+   das alternativas se alinhem entre si mesmo com enunciados longos. */
+.alternativas b {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-accent-200);
+  background: var(--color-accent-900);
+  border: 1px solid transparent;
+  transition:
+    color 120ms ease,
+    background-color 120ms ease,
+    border-color 120ms ease;
+}
+.alternativas span {
+  flex: 1 1 auto;
+}
+.alternativas button:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--color-accent) 55%, transparent);
+  background: color-mix(in srgb, var(--color-accent) 7%, var(--color-surface));
+  transform: translateX(2px);
+}
+.alternativas button:hover:not(:disabled) b {
+  color: var(--color-accent-100);
+  background: var(--color-accent-800);
+}
+.alternativas button.selecionada {
+  border-color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 12%, var(--color-surface));
+  box-shadow: inset 3px 0 0 0 var(--color-accent);
+}
+.alternativas button.selecionada b {
+  color: var(--color-bg);
+  background: var(--color-accent);
+}
+/* Travada após responder: a marcada continua legível, as demais recuam. */
+.alternativas.bloqueada button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+.alternativas.bloqueada button.selecionada:disabled {
+  opacity: 1;
+}
+.aviso-bloqueio {
+  margin: var(--space-3) 0 0;
+  color: var(--color-neutral-500);
+  font-size: 12px;
+}
+.marcacoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--color-divider);
+}
+.btn-marcacao i {
+  font-size: 15px;
+  line-height: 1;
+}
+.btn-marcacao.ativa {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+}
+.btn-marcacao.ativa:hover {
+  background: color-mix(in srgb, var(--color-accent) 20%, transparent);
+}
+.btn-novo-flashcard .tag {
+  margin-left: var(--space-1);
+}

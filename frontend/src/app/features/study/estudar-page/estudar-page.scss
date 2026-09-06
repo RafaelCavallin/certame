@@ -1,0 +1,43 @@
+.layout-estudo {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-8);
+  align-items: start;
+}
+.layout-estudo.com-filtros {
+  grid-template-columns: auto 1fr;
+}
+.estudo {
+  max-width: 980px;
+  margin: 0 auto;
+  padding-bottom: var(--space-8);
+}
+.cabecalho-estudo {
+  max-width: 760px;
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6);
+  margin-bottom: var(--space-8);
+}
+.cabecalho-estudo h1 {
+  margin: 0;
+  font-size: 26px;
+}
+.eyebrow {
+  color: var(--color-neutral-500);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.erro {
+  padding: var(--space-3);
+  color: var(--color-danger-300);
+  background: var(--color-danger-tint);
+  border-radius: var(--radius-md);
+}
+.erro-preparo {
+  max-width: 720px;
+  margin: 0 auto var(--space-6);
+}

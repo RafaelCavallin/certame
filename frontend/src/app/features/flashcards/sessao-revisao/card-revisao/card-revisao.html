@@ -1,0 +1,85 @@
+<div
+  style="
+    border: 1px solid var(--color-divider);
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, var(--color-surface) 60%, var(--color-bg));
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+  "
+>
+  <div
+    style="
+      padding: 34px 30px;
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 10px;
+    "
+  >
+    <div
+      style="
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--color-neutral-500);
+      "
+    >
+      Frente
+    </div>
+    <div
+      style="font-family: var(--font-heading); font-size: 22px; line-height: 1.4; text-wrap: pretty"
+    >
+      {{ card().frente }}
+    </div>
+  </div>
+  @if (revelado()) {
+    <div
+      style="
+        padding: 26px 30px;
+        border-top: 1px solid var(--color-divider);
+        background: color-mix(in srgb, var(--color-accent) 6%, transparent);
+        animation: cf-in 0.25s ease;
+      "
+    >
+      <div
+        style="
+          font-size: 11px;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: var(--color-accent-300);
+          margin-bottom: 8px;
+        "
+      >
+        Verso
+      </div>
+      <div
+        style="
+          font-size: 15px;
+          line-height: 1.7;
+          color: var(--color-neutral-100);
+          text-wrap: pretty;
+        "
+      >
+        {{ card().verso }}
+      </div>
+      <div style="display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; align-items: center">
+        @if (card().disciplinaNome) {
+          <span class="tag tag-neutral">{{ card().disciplinaNome }}</span>
+        }
+        @if (card().assuntoNome) {
+          <span class="tag tag-neutral">{{ card().assuntoNome }}</span>
+        }
+        <span style="flex: 1"></span>
+        <span
+          style="
+            font-size: 11.5px;
+            color: var(--color-neutral-500);
+            font-variant-numeric: tabular-nums;
+          "
+          >{{ card().memoria.rotulo }}</span
+        >
+      </div>
+    </div>
+  }
+</div>

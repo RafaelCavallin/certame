@@ -1,0 +1,39 @@
+.seletor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.selecionadas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  min-height: 22px;
+}
+.selecionadas .tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.selecionadas button {
+  display: inline-flex;
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  font-size: 10px;
+}
+.lista {
+  max-height: 220px;
+  overflow-y: auto;
+  gap: var(--space-1);
+}
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 3px 0;
+}

@@ -1,0 +1,2 @@
+E2E-02 PASSOU 2026-09-05
+estudante faz simulado do inicio ao resultado: Modo Prova sem gabarito, cronometro visivel, Finalizar prova -> /simulados/:id/resultado com Revisao questao a questao

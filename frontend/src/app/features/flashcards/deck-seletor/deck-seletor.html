@@ -1,0 +1,38 @@
+<div class="field" style="margin: 0">
+  <label for="fc-deck">Deck</label>
+  <select
+    id="fc-deck"
+    class="input"
+    style="cursor: pointer"
+    [value]="valorSelect()"
+    (change)="aoSelecionar($any($event.target).value)"
+  >
+    <option [value]="opcaoSemDeck">Sem deck</option>
+    @for (deck of decks(); track deck.id) {
+      <option [value]="deck.id">{{ deck.nome }}</option>
+    }
+    <option [value]="opcaoNovoDeck">+ Novo deck</option>
+  </select>
+  @if (criandoNovo()) {
+    <div class="novo-deck">
+      <input
+        class="input novo-deck__nome"
+        placeholder="Nome do novo deck"
+        autofocus
+        [value]="nomeNovoDeck()"
+        (input)="nomeNovoDeck.set($any($event.target).value)"
+        (keydown.enter)="confirmarNovoDeck()"
+        (keydown.escape)="cancelarNovoDeck()"
+      />
+      <div class="novo-deck__acoes">
+        <button class="btn btn-secondary" type="button" (click)="cancelarNovoDeck()">Cancelar</button>
+        <button class="btn btn-primary" type="button" (click)="confirmarNovoDeck()">
+          <i class="ph ph-check"></i> Criar
+        </button>
+      </div>
+    </div>
+    @if (erro(); as mensagem) {
+      <span class="erro-campo">{{ mensagem }}</span>
+    }
+  }
+</div>

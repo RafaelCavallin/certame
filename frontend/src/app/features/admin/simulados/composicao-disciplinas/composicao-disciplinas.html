@@ -1,0 +1,87 @@
+<section class="card composicao">
+  <div class="section-heading">
+    <div>
+      <h2>Composição por disciplina</h2>
+      <p class="text-muted">
+        Distribua {{ resumo().numeroQuestoes }} questões entre as disciplinas.
+      </p>
+    </div>
+    <span class="tag" [class.tag-success]="resumo().fechada" [class.tag-neutral]="!resumo().fechada"
+      >{{ resumo().somaComposicao }} / {{ resumo().numeroQuestoes }}</span
+    >
+  </div>
+  <div class="table-wrap">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Disciplina</th>
+          <th>Dificuldade</th>
+          <th>Quantidade</th>
+          <th>Disponíveis</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of itens; track $index) {
+          <tr>
+            <td>
+              <select
+                class="input"
+                [(ngModel)]="item.disciplinaId"
+                (ngModelChange)="atualizarDisponiveis($index)"
+                [attr.aria-label]="'Disciplina ' + ($index + 1)"
+              >
+                <option value="">Selecione</option>
+                @for (disciplina of disciplinas(); track disciplina.id) {
+                  <option [value]="disciplina.id">{{ disciplina.nome }}</option>
+                }
+              </select>
+            </td>
+            <td>
+              <select
+                class="input"
+                [(ngModel)]="item.dificuldade"
+                (ngModelChange)="atualizarDisponiveis($index)"
+                [attr.aria-label]="'Dificuldade ' + ($index + 1)"
+              >
+                <option [ngValue]="null">Qualquer</option>
+                <option value="FACIL">Fácil</option>
+                <option value="MEDIA">Média</option>
+                <option value="DIFICIL">Difícil</option>
+              </select>
+            </td>
+            <td>
+              <input
+                class="input quantidade"
+                type="number"
+                min="1"
+                [(ngModel)]="item.quantidade"
+                [attr.aria-label]="'Quantidade ' + ($index + 1)"
+              />
+            </td>
+            <td>{{ disponiveisPorLinha()[$index] ?? '—' }}</td>
+            <td>
+              <button class="btn btn-ghost" type="button" (click)="remover($index)">Remover</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  @if (!itens.length) {
+    <p class="text-muted">Nenhuma disciplina adicionada.</p>
+  }
+  @if (erro()) {
+    <p class="erro" role="alert">{{ erro() }}</p>
+  }
+  <div class="composicao-actions">
+    <button class="btn btn-ghost" type="button" (click)="adicionar()">
+      <i class="ph ph-plus"></i> Adicionar disciplina</button
+    ><button class="btn btn-secondary" type="button" [disabled]="salvando()" (click)="salvar()">
+      Salvar composição
+    </button>
+  </div>
+  @if (!resumo().fechada) {
+    <p class="aviso">A soma precisa ser igual ao número de questões para publicar.</p>
+  }
+</section>

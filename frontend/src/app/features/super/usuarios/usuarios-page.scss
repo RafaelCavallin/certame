@@ -1,0 +1,87 @@
+.admin-page {
+  padding: var(--space-8);
+  max-width: 1240px;
+}
+.admin-page header {
+  margin-bottom: var(--space-6);
+}
+.admin-page h1 {
+  margin-bottom: var(--space-2);
+}
+.toolbar,
+.filters,
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+.toolbar {
+  justify-content: space-between;
+  margin-bottom: var(--space-6);
+}
+.filters select {
+  width: auto;
+  min-height: 36px;
+}
+.table-wrap {
+  padding: var(--space-3) var(--space-4);
+  overflow-x: auto;
+}
+.nome-usuario {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  white-space: nowrap;
+}
+.avatar {
+  width: 28px;
+  height: 28px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--color-accent-800);
+  color: var(--color-accent-100);
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-family: var(--font-heading);
+}
+.ordenavel {
+  cursor: pointer;
+  white-space: nowrap;
+}
+.acoes {
+  text-align: right;
+  white-space: nowrap;
+}
+.danger,
+.erro {
+  color: var(--color-danger-300);
+}
+.empty {
+  text-align: center;
+  padding: var(--space-8);
+}
+.tag-perigo {
+  background: var(--color-danger-tint);
+  color: var(--color-danger-300);
+}
+.tag-inativo {
+  background: var(--color-neutral-900);
+  color: var(--color-neutral-400);
+}
+.pagination {
+  justify-content: space-between;
+  padding-top: var(--space-4);
+  color: var(--color-neutral-400);
+  font-size: 12px;
+}
+@media (max-width: 700px) {
+  .admin-page {
+    padding: var(--space-4);
+  }
+  .filters > * {
+    width: 100% !important;
+    max-width: none;
+  }
+}

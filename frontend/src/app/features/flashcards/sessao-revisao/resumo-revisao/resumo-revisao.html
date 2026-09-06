@@ -1,0 +1,76 @@
+<div style="display: flex; align-items: center; gap: 16px; margin-bottom: 22px">
+  <span
+    style="
+      width: 60px;
+      height: 60px;
+      flex: none;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: color-mix(in srgb, var(--color-accent) 16%, transparent);
+      border: 2px solid var(--color-accent);
+    "
+  >
+    <i class="ph-fill ph-check" style="font-size: 24px; color: var(--color-accent-200)"></i>
+  </span>
+  <div>
+    <h2 style="margin: 0 0 4px; font-size: 22px">Revisão concluída</h2>
+    <div style="font-size: 13px; color: var(--color-neutral-400)">{{ subtitulo() }}</div>
+  </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px">
+  @for (cartao of cartoes(); track cartao.label) {
+    <div class="card elev-sm" style="gap: 4px">
+      <span class="card-kicker">{{ cartao.label }}</span>
+      <div [style]="'font-family:var(--font-heading);font-size:24px;color:' + cartao.cor">
+        {{ cartao.valor }}
+      </div>
+    </div>
+  }
+</div>
+
+<div
+  style="
+    border: 1px solid var(--color-divider);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    margin-bottom: 22px;
+  "
+>
+  <div style="font-family: var(--font-heading); font-size: 14px; margin-bottom: 10px">
+    Próximos vencimentos
+  </div>
+  @for (faixa of resumo().proximosVencimentos; track faixa.faixa) {
+    <div
+      style="
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 7px 0;
+        font-size: 13px;
+        color: var(--color-neutral-300);
+        border-bottom: 1px solid var(--color-divider);
+      "
+    >
+      <span>{{ faixa.rotulo }}</span>
+      <span style="color: var(--color-accent-300); font-variant-numeric: tabular-nums">{{
+        faixa.quantidade
+      }}</span>
+    </div>
+  }
+</div>
+
+<div style="display: flex; gap: 10px">
+  <button class="btn btn-primary" type="button" (click)="reiniciar.emit()">
+    <i class="ph ph-arrow-counter-clockwise"></i> Revisar de novo
+  </button>
+  <button
+    class="btn btn-secondary"
+    type="button"
+    (click)="voltar.emit()"
+    style="border-color: var(--color-divider)"
+  >
+    Voltar para meus flashcards
+  </button>
+</div>

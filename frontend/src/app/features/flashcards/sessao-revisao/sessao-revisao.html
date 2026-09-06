@@ -1,0 +1,125 @@
+<div
+  style="padding: 26px 28px; max-width: 720px; margin: 0 auto; animation: cf-in 0.35s ease"
+  appAtalhosRevisao
+  [revelado]="store.revelado()"
+  (revelar)="store.revelar()"
+  (classificar)="classificar($event)"
+>
+  <button
+    class="btn btn-ghost"
+    type="button"
+    (click)="voltar()"
+    style="margin-bottom: 16px; padding: 0"
+  >
+    <i class="ph ph-arrow-left"></i> Voltar para meus flashcards
+  </button>
+
+  @if (store.carregando()) {
+    <p style="color: var(--color-neutral-400); font-size: 13px">Carregando fila…</p>
+  } @else if (store.resumo(); as resumo) {
+    @if (store.adiados(); as adiados) {
+      <p
+        role="status"
+        style="
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin: 0 0 16px;
+          padding: 9px 12px;
+          border: 1px solid var(--color-divider);
+          border-radius: var(--radius-md);
+          font-size: 12.5px;
+          color: var(--color-neutral-300);
+        "
+      >
+        <i class="ph ph-clock-counter-clockwise" aria-hidden="true"></i>
+        {{ adiados === 1 ? '1 card ainda não venceu' : adiados + ' cards ainda não venceram' }} —
+        {{ adiados === 1 ? 'ele volta' : 'eles voltam' }} na próxima sessão, sem espera aqui.
+      </p>
+    }
+    <app-resumo-revisao [resumo]="resumo" (reiniciar)="reiniciar()" (voltar)="voltar()" />
+  } @else if (store.filaVazia()) {
+    <app-fila-vazia (voltar)="voltar()" />
+  } @else if (store.cardAtual(); as card) {
+    <div
+      style="
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 10px;
+      "
+    >
+      <span class="tag tag-outline">{{ card.deckNome }}</span>
+      <span
+        style="
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          font-size: 12.5px;
+          color: var(--color-neutral-400);
+          font-variant-numeric: tabular-nums;
+        "
+      >
+        <span aria-label="Tempo de sessão">
+          <i class="ph ph-timer" aria-hidden="true"></i> {{ tempoSessao() }}
+        </span>
+        <span aria-hidden="true">·</span>
+        {{ store.classificacoes() }}
+        {{ store.classificacoes() === 1 ? 'classificação' : 'classificações' }} ·
+        {{ store.restantes() }} restantes hoje
+      </span>
+    </div>
+    <div
+      style="
+        height: 4px;
+        border-radius: 4px;
+        background: var(--color-neutral-800);
+        overflow: hidden;
+        margin-bottom: 20px;
+      "
+    >
+      <div
+        style="height: 100%; background: var(--color-accent); transition: width 0.3s ease"
+        [style.width.%]="store.progressoPct()"
+      ></div>
+    </div>
+
+    @if (store.reenfileirado(); as rotulo) {
+      <p
+        role="status"
+        style="
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin: 0 0 14px;
+          padding: 9px 12px;
+          border: 1px solid var(--color-divider);
+          border-radius: var(--radius-md);
+          background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+          font-size: 12.5px;
+          color: var(--color-neutral-300);
+        "
+      >
+        <i class="ph ph-arrow-u-down-left" aria-hidden="true"></i>
+        Classificação registrada — este card só volta daqui a {{ rotulo }}. Se a sessão acabar
+        antes, ele fica para a próxima.
+      </p>
+    }
+
+    <app-card-revisao [card]="card" [revelado]="store.revelado()" />
+
+    @if (!store.revelado()) {
+      <button
+        class="btn btn-primary btn-block"
+        type="button"
+        (click)="store.revelar()"
+        style="height: 44px; margin-top: 18px"
+      >
+        Mostrar resposta <span style="font-size: 11px; margin-left: 6px">espaço</span>
+      </button>
+    } @else {
+      <app-notas-revisao [previsoes]="card.previsoes" (classificar)="classificar($event)" />
+    }
+  }
+</div>

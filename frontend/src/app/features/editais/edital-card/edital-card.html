@@ -1,0 +1,37 @@
+<article
+  class="card elev-sm edital-card"
+  [class.encerrado]="edital().status === 'ENCERRADO'"
+  [class.selecionado]="selecionado()"
+>
+  <div class="cabecalho">
+    <span class="card-title">{{ edital().nome }}</span
+    ><span [class]="classeStatus()">{{ rotuloStatus() }}</span>
+  </div>
+  <div class="detalhes">
+    <div>
+      <i class="ph ph-gavel" aria-hidden="true"></i> {{ edital().banca?.nome ?? '—' }} ·
+      {{ edital().orgao?.nome ?? '—' }}
+    </div>
+    <div>
+      <i class="ph ph-users-three" aria-hidden="true"></i>
+      @if (edital().vagas != null) {
+        {{ edital().vagas | number: '1.0-0' }} vagas
+      } @else {
+        Vagas a definir
+      }
+    </div>
+    <div>
+      <i class="ph ph-calendar-check" aria-hidden="true"></i>
+      @if (edital().prazoInscricao) {
+        Inscrições até {{ edital().prazoInscricao | date: 'dd/MM/yyyy' : 'UTC' }}
+      } @else {
+        Data a definir
+      }
+    </div>
+  </div>
+  <div class="disciplinas">
+    @for (disciplina of edital().disciplinas; track disciplina.id) {
+      <span class="tag tag-neutral">{{ disciplina.nome }}</span>
+    }
+  </div>
+</article>
