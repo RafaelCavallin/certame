@@ -32,10 +32,39 @@
   color: var(--color-bg);
   background: var(--color-accent);
 }
+/* Como no protótipo: a lista ocupa o espaço livre e rola sozinha, mantendo a
+   marca no topo e o rodapé com o usuário sempre visíveis em telas baixas. */
 .navegacao nav {
   display: grid;
+  flex: 1;
+  min-height: 0;
+  align-content: start;
+  overflow-y: auto;
   gap: var(--space-1);
   padding: 6px 12px 12px;
+}
+/* Na lateral a barra fica invisível até o ponteiro entrar no menu, para não
+   competir com os itens; sem setas e mais estreita que a do conteúdo. */
+.navegacao nav::-webkit-scrollbar {
+  width: 6px;
+}
+.navegacao nav::-webkit-scrollbar-button {
+  display: none;
+}
+.navegacao nav::-webkit-scrollbar-thumb {
+  border: 0;
+  background: transparent;
+}
+.navegacao nav:hover::-webkit-scrollbar-thumb {
+  background: var(--color-neutral-800);
+}
+@supports not selector(::-webkit-scrollbar) {
+  .navegacao nav {
+    scrollbar-color: transparent transparent;
+  }
+  .navegacao nav:hover {
+    scrollbar-color: var(--color-neutral-800) transparent;
+  }
 }
 .secao {
   padding: 12px 10px 6px;
