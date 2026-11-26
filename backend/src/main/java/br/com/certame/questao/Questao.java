@@ -1,6 +1,7 @@
 package br.com.certame.questao;
 
 import br.com.certame.catalogo.*;
+import br.com.certame.importacao.textobase.TextoBase;
 import br.com.certame.usuario.Usuario;
 import jakarta.persistence.*;
 import java.time.Instant;
@@ -32,6 +33,15 @@ public class Questao {
     @Column(name = "criado_em", nullable = false, updatable = false) private Instant criadoEm;
     @Column(name = "atualizado_em", nullable = false) private Instant atualizadoEm;
     @JdbcTypeCode(SqlTypes.OTHER) @Column(name = "busca", insertable = false, updatable = false, columnDefinition = "tsvector") private String busca;
+    @Enumerated(EnumType.STRING) @Column(nullable = false) private Fonte fonte = Fonte.INTERNA;
+    @Column(name = "identificador_externo") private String identificadorExterno;
+    @Column(name = "url_externa") private String urlExterna;
+    @Column(name = "importado_em") private Instant importadoEm;
+    @Column(name = "verificado_em") private Instant verificadoEm;
+    @Column(name = "hash_externo") private String hashExterno;
+    @Column(name = "lote_importacao_id") private UUID loteImportacaoId;
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "texto_base_id") private TextoBase textoBase;
+    @Column(name = "hash_enunciado", insertable = false, updatable = false) private String hashEnunciado;
     @OneToMany(mappedBy = "questao", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("ordem asc") private List<Alternativa> alternativas = new ArrayList<>();
     protected Questao() {}
@@ -58,6 +68,15 @@ public class Questao {
     public Instant getCriadoEm() { return criadoEm; }
     public Instant getAtualizadoEm() { return atualizadoEm; }
     public List<Alternativa> getAlternativas() { return alternativas; }
+    public Fonte getFonte() { return fonte; }
+    public String getIdentificadorExterno() { return identificadorExterno; }
+    public String getUrlExterna() { return urlExterna; }
+    public Instant getImportadoEm() { return importadoEm; }
+    public Instant getVerificadoEm() { return verificadoEm; }
+    public String getHashExterno() { return hashExterno; }
+    public UUID getLoteImportacaoId() { return loteImportacaoId; }
+    public TextoBase getTextoBase() { return textoBase; }
+    public String getHashEnunciado() { return hashEnunciado; }
     public void setCodigo(String valor) { codigo = valor; }
     public void setTipo(TipoQuestao valor) { tipo = valor; }
     public void setEnunciado(String valor) { enunciado = valor; }
@@ -72,4 +91,12 @@ public class Questao {
     public void setStatus(StatusQuestao valor) { status = valor; }
     public void setPublicadoEm(Instant valor) { publicadoEm = valor; }
     public void setExcluidoEm(Instant valor) { excluidoEm = valor; }
+    public void setFonte(Fonte valor) { fonte = valor; }
+    public void setIdentificadorExterno(String valor) { identificadorExterno = valor; }
+    public void setUrlExterna(String valor) { urlExterna = valor; }
+    public void setImportadoEm(Instant valor) { importadoEm = valor; }
+    public void setVerificadoEm(Instant valor) { verificadoEm = valor; }
+    public void setHashExterno(String valor) { hashExterno = valor; }
+    public void setLoteImportacaoId(UUID valor) { loteImportacaoId = valor; }
+    public void setTextoBase(TextoBase valor) { textoBase = valor; }
 }
